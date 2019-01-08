@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>发布商品</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span {
+            height: auto !important;
+        }
+
+        .ms-controller {
+            visibility: hidden;
+        }
+
+        .must {
+            color: red;
+            font-size: 20px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
+
+        nav li {
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title" :if="!uid">创建用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            (初始密码为：111111)
+        </div>
+        <div class="title" :if="uid">编辑</div>
+
+        <div class="clear"></div>
+        <div class="form">
+            <div class="form_row" :if="!uid">
+                <div style="clear: both;"></div>
+                <p class="row_left">用户名:</p>
+
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.username">
+                </div>
+            </div>
+            <div class="form_row" :if="uid">
+                <div style="clear: both;"></div>
+                <p class="row_left">用户名:</p>
+
+                <div class="row_right">
+                    <input type="text" style="color: #ccc;" readonly placeholder="" :duplex="detail.username">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">手机号:</p>
+
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.mobile">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">邮箱:</p>
+
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.email">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">状态</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.status">
+                            <option value="0" ms-attr="{selected:detail.status==0?true:false}">未启用</option>
+                            <option value="1" ms-attr="{selected:detail.status==1?true:false}">已启用</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row" :if="uid">
+                <div style="clear: both;"></div>
+                <p class="row_left">重置密码:</p>
+
+                <div class="row_right">
+                    <button :click="reset()">重置密码</button>
+                </div>
+            </div>
+            <div class="form_row" :if="!uid">
+                <div style="clear: both;"></div>
+                <p class="row_left">密码:</p>
+
+                <div class="row_right">
+                    <input style="color: #ccc;" readonly type="number" placeholder="" value="111111">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">菜单:</p>
+
+                <div class="row_right">
+                    <div class="checkout_wrapper">
+                        <input type="checkbox" name="menu" value="map/list" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">首页列表</span>
+                        <input type="checkbox" name="menu" value="project/list" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">重点项目</span>
+                        <input type="checkbox" name="menu" value="trace/list" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">项目报送</span>
+                        <input type="checkbox" name="menu" value="report/list" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">项目分析</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row" style="margin-bottom: 10px;">
+                <div style="clear: both;"></div>
+                <p class="row_left"></p>
+
+                <div class="row_right">
+                    <div class="checkout_wrapper">
+                        <input type="checkbox" name="menu" value="check/list" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">填报审核</span>
+                        <input type="checkbox" name="menu" value="source/help" class="checkout2" :click="setMenu()"/>
+                        <span class="myselct">用户手册</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row" :for="(index,el) in @region" :if="index%4 == 0">
+                <div style="clear: both;"></div>
+                <p class="row_left" :if="index==0">镇区:</p>
+
+                <p class="row_left" :if="index!=0"></p>
+
+                <div class="row_right">
+                    <div class="checkout_wrapper">
+                        <!--ms-for: (index1,el1) in @region-->
+                        <input type="checkbox" :if="index1>=index && index1<(index+4)" :click="setRegion()"
+                               name="region" ms-attr="{value:el1.id}" class="checkout2"/>
+                        <span class="myselct" :if="index1>=index && index1<(index+4)">{{ el1.region_name }}</span>
+                        <!--ms-for-end:-->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form_row" style="margin-top: 70px;">
+                <div class="next2" :click="submit()">提交</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css", "font-awesome.css"]);
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            detail: {
+                username: "",
+                mobile:"",
+                email:"",
+                status:1,
+                menu: [],
+                rid: []
+            },
+            uid: "",
+            region: [],
+            getDetail: function (id) {
+                $.ajaxGet({
+                    url: "/trace/user/detail",
+                    uid: id
+                }, function (data) {
+                    model.detail = data.detail;
+                    model.doCheck();
+                });
+            },
+            getRegion: function () {
+                $.ajaxGet({
+                    url: "/trace/project/region",
+                }, function (data) {
+                    model.region = data.list;
+                });
+            },
+            setRegion: function () {
+                model.detail.rid = [];
+                $('input[name="region"]:checked').each(function () {
+                    model.detail.rid.push(parseInt($(this).val()));
+                })
+            },
+            setMenu: function () {
+                model.detail.menu = [];
+                $('input[name="menu"]:checked').each(function () {
+                    model.detail.menu.push($(this).val());
+                })
+            },
+            doCheck: function () {
+                setTimeout(function () {
+                    $('input[name="region"]').each(function () {
+                        if ($.inArray(parseInt($(this).val()), model.detail.rid) != -1) {
+                            $(this).prop("checked", "checked");
+                        }
+                    });
+                }, 200);
+                $('input[name="menu"]').each(function () {
+                    if ($.inArray($(this).val(), model.detail.menu) != -1) {
+                        $(this).prop("checked", "checked");
+                    }
+                })
+            },
+            submit: function () {
+                if (!model.uid) {
+                    var url = "/trace/user/add";
+                } else {
+                    var url = "/trace/user/edit";
+                }
+                $.ajaxPost({
+                    url: url,
+                    username: model.detail.username,
+                    mobile: model.detail.mobile,
+                    email: model.detail.email,
+                    status: model.detail.status,
+                    menu: JSON.stringify(model.detail.menu),
+                    rid: JSON.stringify(model.detail.rid),
+                    uid: model.uid
+                }, function (data) {
+                    alert("操作成功");
+                    redict_iframe("/trace/t/#user/list.html");
+                });
+            },
+            reset: function () {
+                if (!confirm("确认重置密码吗?")) return;
+                $.ajaxPost({
+                    url: "/trace/user/reset",
+                    uid: model.uid
+                }, function (data) {
+                    alert("操作成功");
+                });
+            }
+        });
+        model.getRegion();
+        model.uid = getRequest().uid;
+        if (model.uid) {
+            model.getDetail(model.uid);
+        }
+
+    });
+</script>
+</body>
+
+</html>

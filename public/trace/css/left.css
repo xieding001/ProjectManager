@@ -1,0 +1,120 @@
+.personalCenter{
+    position: relative;
+    height:140px;
+    background: #3d4545;
+}
+.personalCenter .personalCenter_wapper{
+    width:66px;
+    height:66px;
+    position: absolute;
+    top:40%;
+    left:50%;
+    margin-top:-33px;
+    margin-left:-33px;
+}
+.personalCenter .personalCenter_wapper img{
+    border-radius: 50%;
+}
+.personalCenter p{
+    margin-top:10px;
+    color:#fff;
+    text-align: center;
+}
+#aside{
+    float: left;
+    width: 130px;
+    background: #3d4545;
+    /*min-height: 949px;*/
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    top:0;
+}
+.asideNav {
+    height:100%;
+    background: #3d4545;
+    /*overflow-y:scroll; */
+    max-height: 558px;
+}
+.asideNav::-webkit-scrollbar{
+    display: none;
+}
+.asideNav li{
+    width: 90%;
+    margin: auto;
+}
+.asideNav .asideNav_link {
+    height:45px;
+    line-height: 45px;
+    cursor: pointer;
+    display: block;
+    padding-left:35px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    position: relative;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.asideNav .asideNav_link p{
+    color:#cacaca;
+}
+.asideNav .asideNav_link p span{
+    color:#fff;
+    background: red;
+    /*padding: px;*/
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 0 3px;
+    margin-left: 5px;
+}
+.asideNav .asideNav_link p:hover{
+    color:#fff;
+}
+.asideNav li img {
+    text-align: center;
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 18px;
+    color: #595959;
+    width: 18px;
+    height: 18px;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+/*.asideNav li.borderLeft{
+    border-left:4px solid #66cccc;
+}*/
+.asideNav li.asideChoose {
+    background: #3e8383;
+}
+.submenu {
+    display: none;
+    background: #263131;
+    font-size: 14px;
+}
+
+.submenu li {
+    cursor: pointer;
+    width: 100%;
+    height:40px;
+    line-height: 40px;
+    border-bottom: 1px solid #263131;
+}
+.submenu li a{
+    display: block;
+    width: 100%;
+    height:40px;
+    color:#fff;
+    text-indent: 33px;
+    font-size: 13px;
+}
+.submenu li a:hover{
+    text-decoration:none;
+}
+.submenu-a{
+    color:#66CCCE !important;
+}

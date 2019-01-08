@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>重点工业项目</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/detail_new.css">
+    <link rel="stylesheet" href="/css/release.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 20% !important;
+        }
+
+        .order_ul {
+            margin: auto;
+            display: block !important;
+        }
+
+        .GooFlow_head, .GooFlow_tool {
+            display: none;
+        }
+
+        .ico {
+            display: none;
+        }
+
+        .GooFlow_item table {
+            height: 25px !important;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">项目报告 > 详情</p>
+
+            <div class="clear"></div>
+        </div>
+        <!-- 展示部分 -->
+        <div class="main">
+            <div class="order_main">
+                <div class="item_box">
+                    <div class="order_title">内容：</div>
+                    <ul class="order_ul" style="float: left;"><p></p>
+                        <li>
+                            <p>时间：</p>
+
+                            <p>{{ trace_show.date }}</p>
+                        </li>
+                        <li>
+                            <p>企业名称：</p>
+
+                            <p>{{ detail.company }}</p>
+                        </li>
+                        <li>
+                            <p>项目名称：</p>
+
+                            <p>{{ detail.name }}</p>
+                        </li>
+                        <li>
+                            <p>属性：</p>
+
+                            <p :if="detail.project_type == 1">新建</p>
+                            <p :if="detail.project_type == 2">续建</p>
+                            <p :if="detail.project_type == 0">""</p>
+
+                        </li>
+                        <li>
+                            <p>镇区：</p>
+                            <p>{{ detail.region }}</p>
+                        </li>
+                        <li>
+                            <p>建设情况：</p>
+                            <p :if="detail.process == 0">未开工</p>
+                            <p :if="detail.process == 1">已开工</p>
+                            <p :if="detail.process == 2">在建</p>
+                            <p :if="detail.process == 3">部分投产</p>
+                            <p :if="detail.process == 4">竣工投产</p>
+                        </li>
+                        <li>
+                            <p>总投资（万元）：</p>
+                            <p>{{ detail.invest_all }}</p>
+                        </li>
+                        <li>
+                            <p>总规划用地面积（亩）：</p>
+                            <p>{{ detail.area_all }}</p>
+                        </li>
+                        <li>
+                            <p>已使用总投资（万元）：</p>
+
+                            <p>{{ trace_show.invest_all_used }}</p>
+                        </li>
+                        <li>
+                            <p>已使用设备投资（万元）：</p>
+
+                            <p>{{ trace_show.invest_device_used }}</p>
+                        </li>
+                        <li>
+                            <p style="float: left;">形象进度：</p>
+
+                            <p>
+                                <textarea
+                                        style="width: 700px;height: 100px;padding: 10px;margin-bottom: -5px;border: 1px solid #ddd;"
+                                        readonly :duplex="trace_show.desc"></textarea>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="item_box" style="height: 200px;" :visible="trace.length>0">
+                    <div class="order_title">图片：</div>
+                    <ul class="order_img order_ul order_ul2">
+                        <li :for="el in trace_show.img">
+                            <a target="_blank" ms-attr="{href:el}"><img ms-attr="{src:el}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flowChart" :visible="trace.length>0"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var mode;
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            show_type: 1,
+            detail: {},
+            trace: {},
+            trace_show: {
+                date: "",
+                desc: "",
+                invest_all_used: "",
+                invest_device_used: "",
+                type: "",
+                img: []
+            },
+            pid: "",
+            canClick: "",
+            doDetail: function () {
+                $.ajaxGet({
+                    url: "/trace/project/detail",
+                    pid: model.pid
+                }, function (data) {
+                    model.detail = data.detail;
+                    model.trace = data.trace;
+                    if (model.trace.length > 0) {
+                        model.trace_show = model.trace[0];
+                    }
+                    model.time();
+                });
+            },
+            time: function () {
+                $(".flowChart").empty();
+                require(['timeLine'], function () {
+                    var jsonArr = model.trace;
+                    timeAxis(jsonArr);
+                });
+            },
+            redict: function (url) {
+                redict_iframe(url)
+            },
+        });
+        model.pid = getRequest().pid;
+        model.doDetail();
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+    function showTrace(o, i) {
+        model.trace_show = model.trace[i];
+        $(o).css("background", "#1ac8b5");
+        $(o).css("border-color", "#1ac8b5");
+        $(o).parent().siblings().find(".check").css("background", "#ccc").css("border-color", "#ccc");
+    }
+</script>
+</body>
+
+</html>

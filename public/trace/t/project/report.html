@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>形象进度</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span {
+            height: auto !important;
+        }
+
+        .ms-controller {
+            visibility: hidden;
+        }
+
+        .must {
+            color: red;
+            font-size: 20px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
+
+        nav li {
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title">前期进度 > 进度报告</div>
+        <div class="form" style="margin-top: 20px;">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">名称</p>
+
+                <div class="row_right" >
+                    <input type="text" placeholder="" :duplex="detail.title">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">受理部门</p>
+
+                <div class="row_right" >
+                    <input type="text" placeholder="" :duplex="detail.department">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">备注</p>
+
+                <div class="row_right" >
+                    <input type="text" placeholder="" :duplex="detail.remark">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">上传办理日期</p>
+
+                <div class="row_right" >
+                    <input readonly id="inpstart"  type="text" placeholder="" :duplex="detail.time_begin">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">结束时间</p>
+
+                <div class="row_right">
+                    <input readonly id="inpend" placeholder="" :duplex="detail.time_end">
+                </div>
+            </div>
+            <div class="form_double_row">
+                <div style="clear: both;"></div>
+
+                <p class="row_left">形象进度图片</p>
+
+                <div class="row_right" style="margin-top: 5px;">
+                    <div id="fileUploadContent" class="fileUploadContent">
+                        <div class="uploadBts">
+                            <div style="width: 100px;height: 100px;" :for="(index,el) in img">
+                                <img :attr="{src:el.img_url}" width="100" height="100" alt="">
+
+                                <div class="remove_img" :click="removeImg(index)">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </div>
+                            </div>
+                            <div class="chooseImg selectFileBt">
+                                <img src="/img/icon/icon_add.png" alt="">
+                                <span style="font-size: 12px;">点击添加图片</span>
+                            </div>
+
+                        </div>
+                        <div class="box"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_tips">
+                <div style="clear: both;"></div>
+                <p class="row_left"></p>
+
+                <div class="row_right" style="margin-top: 20px;font-size: 12px;">支持jpg、gif、png图片格式</div>
+            </div>
+            <br/>
+            <div class="form_row" style="margin-top: 50px;">
+                <div class="next2" :click="apply()">完成</div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css", "font-awesome.css"]);
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            detail: {
+                "title": "",
+                "department": "",
+                "material": "",
+                "remark": "",
+                "time_begin": "",
+                "time_end": "",
+                "img" :[]
+            },
+            pid: "",
+            type: "",
+            show: "",
+            img: [],
+            getDetail: function () {
+                $.ajaxGet({
+                    url: "/trace/process/apply/detail",
+                    pid: model.pid,
+                    type: model.type,
+                }, function (data) {
+                    if (data.detail) {
+                        model.detail = data.detail;
+                        for (var i in data.detail.img){
+                            var obj = {
+                                "img_url":data.detail.img[i]
+                            };
+                            model.img.push(obj);
+                        }
+                    }
+                });
+            },
+            apply: function () {
+                var detail = model.detail;
+                detail.url = "/trace/process/apply/do";
+                detail.pid = model.pid;
+                detail.type = model.type;
+                detail.img = [];
+                for (var i in model.img){
+                    detail.img.push(model.img[i].img_url);
+                }
+                // if (jsonEmptyVerify(detail, [
+                //             {"k": "title", "v": "名称不能为空"},
+                //             {"k": "department", "v": "部门不能为空"},
+                //             {"k": "time_begin", "v": "开始时间不能为空"},
+                //         ])) return;
+
+                $.ajaxPost(detail, function (data) {
+                    alert("操作成功");
+                    model.redict("/trace/t/#project/detail.html?pid=" + model.pid + "&show=" + model.show);
+                });
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            },
+            removeImg: function (index) {
+                if (!confirm("确认删除码")) return;
+
+                for (var i in model.img) {
+                    if (i == index) {
+                        model.img.splice(index, 1);
+                    }
+                }
+            },
+        });
+        model.pid = getRequest().id;
+        model.type = getRequest().type;
+        model.show = getRequest().show;
+
+        model.getDetail();
+    });
+
+    //图片上传部分
+    require(["jquery.fileUpload"], function () {
+        $(function () {
+            $("#fileUploadContent").initUpload({
+                "uploadUrl": "/trace/system/img/upload",//上传文件信息地址
+                //"size":350,//文件大小限制，单位kb,默认不限制
+                "maxFileNumber": 5,//文件个数限制，为整数
+                "filelSavePath": "",//文件上传地址，后台设置的根目录
+                "beforeUpload": beforeUploadFun,//在上传前执行的函数
+                "onUpload": onUploadFun,//在上传后执行的函数
+                "autoCommit": true,//文件是否自动上传
+                "fileType": ['png', 'jpg', 'docx', 'doc']//文件类型限制，默认不限制，注意写的是文件后缀
+            });
+        });
+        $(function () {
+            $('#aside').height($(window).height());
+        })
+    });
+    require(["jquery.jedate"], function () {
+        $(function () {
+            //日期选择
+            var start = {
+                format: 'YYYY-MM-DD',
+                minDate: '2004-06-16', //设定最小日期为入驻日期
+                maxDate: '2030-12-31', //最大日期
+                okfun: function (obj) {
+                    end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
+//                    endDates();
+                }
+            };
+            var end = {
+                format: 'YYYY-MM-DD',
+                maxDate: '2030-12-31', //最大日期
+                okfun: function (obj) {
+                    start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
+                }
+            };
+
+            function endDates() {
+                //将结束日期的事件改成 false 即可
+                end.trigger = false;
+                $("#inpend").jeDate(end);
+            }
+
+            $('#inpstart').jeDate(start);
+            $('#inpend').jeDate(end);
+        });
+    });
+    function beforeUploadFun() {
+    }
+    function onUploadFun(opt, data) {
+        uploadTools.uploadError(opt);//显示上传错误
+        uploadTools.uploadSuccess(opt);//显示上传成功
+    }
+
+</script>
+</body>
+
+</html>s

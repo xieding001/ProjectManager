@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title></title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 7.69% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+
+        .red td {
+            color: red;
+        }
+
+        .red td div {
+            color: red;
+        }
+
+        .vf {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 120px;
+        }
+
+        tr th {
+            /*line-height: 40px !important;*/
+        }
+
+        .th2 {
+            width: 70px;
+            line-height: 20px !important;;
+        }
+
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">重点项目列表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                （红色列表为此月未填报）
+            </p>
+
+            <div class="list">
+                <div class="dw_filter dw_filter on" style="margin-bottom: 0px;">
+                    <div class="el on">
+                        <span class="title">项目名称：</span>
+
+                        <div class="getr">
+                            <input type="text" name="keyword" placeholder="请输入项目名称" maxlength="200"
+                                   :duplex="search.name">
+                        </div>
+                        <div class="btnbox" style="margin-top: -28px;">
+                            <span class="p_but" :click="doList2()">搜索</span>
+                        </div>
+                        <div class="btnbox" style="margin-top: -38px;float: right;">
+                            <span class="p_but" :click="redict('/trace/t/#project/add.html')">新增</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <!-- 展示部分 -->
+        <div class="main" style="margin-top: -10px;">
+            <nav>
+                <li class="active_bg" :click="doList('')" :if="search.rid==''">所有城镇</li>
+                <li :click="doList('')" :if="search.rid!=''">所有城镇</li>
+
+                <li class="active_bg" :click="doList(11)" :if="search.rid==11">江苏中关村</li>
+                <li :click="doList(11)" :if="search.rid!=11">江苏中关村</li>
+
+                <li class="active_bg" :click="doList(4)" :if="search.rid==4">天目湖镇</li>
+                <li :click="doList(4)" :if="search.rid!=4">天目湖镇</li>
+
+                <li class="active_bg" :click="doList(7)" :if="search.rid==7">经开区(上兴)</li>
+                <li :click="doList(7)" :if="search.rid!=7">经开区(上兴)</li>
+
+                <li class="active_bg" :click="doList(8)" :if="search.rid==8">社渚镇</li>
+                <li :click="doList(8)" :if="search.rid!=8">社渚镇</li>
+
+                <li class="active_bg" :click="doList(1)" :if="search.rid==1">溧城镇</li>
+                <li :click="doList(1)" :if="search.rid!=1">溧城镇</li>
+
+                <li class="active_bg" :click="doList(3)" :if="search.rid==3">埭头镇</li>
+                <li :click="doList(3)" :if="search.rid!=3">埭头镇</li>
+
+                <li class="active_bg" :click="doList(2)" :if="search.rid==2">上黄镇</li>
+                <li :click="doList(2)" :if="search.rid!=2">上黄镇</li>
+
+                <li class="active_bg" :click="doList(10)" :if="search.rid==10">戴埠镇</li>
+                <li :click="doList(10)" :if="search.rid!=10">戴埠镇</li>
+
+                <li class="active_bg" :click="doList(5)" :if="search.rid==5">别桥镇</li>
+                <li :click="doList(5)" :if="search.rid!=5">别桥镇</li>
+
+                <li class="active_bg" :click="doList(9)" :if="search.rid==9">竹箦镇</li>
+                <li :click="doList(9)" :if="search.rid!=9">竹箦镇</li>
+
+                <li class="active_bg" :click="doList(6)" :if="search.rid==6">南渡镇</li>
+                <li :click="doList(6)" :if="search.rid!=6">南渡镇</li>
+
+            </nav>
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+					<th>序号</th>
+                    <th>企业名称</th>
+                    <th>项目名称</th>
+                    <th>属性</th>
+                    <th>重点类型</th>
+                    <th>企业联系人</th>
+                    <th>建设情况</th>
+                    <th>形象进度</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--ms-for: (i,el) in zlist-->
+                <tr ms-attr="{class:el.is_trace>0?'':'red'}">
+					<td>{{ i+1+(page.no-1)*10 }}</td>
+                    <td style='text-align:left'>{{ el.company }}</td>
+                    <td style='text-align:left'>{{ el.name }}</td>
+                    <td>{{ el.project_type }}</td>
+                    <td>{{ el.important_type }}</td>
+                    <td>{{ el.company_user }}</td>
+                    <td>{{ el.process }}</td>
+                    <td class="vf" style='text-align:left'>{{ el.trace }}</td>
+                    <td style="min-width: 170px;">  
+                        <span class="look" :click="redict('/trace/t/#project/add.html?pid='+el.pid)">编辑</span>
+                        <span class="look" :click="redict('/trace/t/#project/detail.html?pid='+el.pid)">详情</span>
+                        <span class="look" :click="del(el.pid)">删除</span>
+                        <span class="look" :click="up(search.name,search.rid,page.no,i)">↑</span>
+                        <span class="look" :click="down(search.name,search.rid,page.no,i)">↓</span>
+                    </td>
+                </tr>
+                <!--ms-for-end:-->
+                <tr :visible="page.doing">
+                    <td colspan='16'>
+                        <img src="/img/loading.gif" alt="" width="40" height="40">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 分页组件 -->
+            <div style="width: 100%;text-align: center;">
+                <ul class="pagination fr" :visible="page.count > page.size">
+                    <li class="disabled">
+                        <span>总记录数：{{ page.count }}</span>
+                    </li>
+                    <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                    <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                    <!--ms-for: el in page.nums-->
+                    <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <!--ms-for-end:-->
+                    <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                    <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                </ul>
+                <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: "",
+                name: ""
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0)) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                window.sessionStorage.setItem('pageNo',pageNo);
+                window.sessionStorage.setItem('name',model.search.name);
+                window.sessionStorage.setItem('rid',model.search.rid);
+                $.ajaxGet({
+                    url: "/trace/project/list",
+                    rid: model.search.rid,
+                    name: model.search.name,
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+
+                    model.zlist = data.list;
+                    for (var i in model.zlist) {
+                        if (model.zlist[i].project_type == 1) {
+                            model.zlist[i].project_type = "新建";
+                        }
+                        if (model.zlist[i].project_type == 2) {
+                            model.zlist[i].project_type = "续建";
+                        }
+                        if (model.zlist[i].project_type == 0) {
+                            model.zlist[i].project_type = "";
+                        }
+                        if (model.zlist[i].process == 0) {
+                            model.zlist[i].process = "未开工";
+                        }
+                        if (model.zlist[i].process == 1) {
+                            model.zlist[i].process = "已开工";
+                        }
+                        if (model.zlist[i].process == 2) {
+                            model.zlist[i].process = "在建";
+                        }
+                        if (model.zlist[i].process == 3) {
+                            model.zlist[i].process = "部分投产";
+                        }
+                        if (model.zlist[i].process == 4) {
+                            model.zlist[i].process = "竣工投产";
+                        }
+                        if (model.zlist[i].product_important == 0) {
+                            model.zlist[i].product_important = "";
+                        }
+                        if (model.zlist[i].product_important == 1) {
+                            model.zlist[i].product_important = "动力电池";
+                        }
+                        if (model.zlist[i].product_important == 2) {
+                            model.zlist[i].product_important = "智能电网";
+                        }
+                        if (model.zlist[i].product_important == 3) {
+                            model.zlist[i].product_important = "汽车及零部件";
+                        }
+                        if (model.zlist[i].product_important == 4) {
+                            model.zlist[i].product_important = "饲料与农牧机械";
+                        }
+                        if (model.zlist[i].product_new == 0) {
+                            model.zlist[i].product_new = "";
+                        }
+                        if (model.zlist[i].product_new == 1) {
+                            model.zlist[i].product_new = "节能环保";
+                        }
+                        if (model.zlist[i].product_new == 2) {
+                            model.zlist[i].product_new = "新一代信息技术";
+                        }
+                        if (model.zlist[i].product_new == 3) {
+                            model.zlist[i].product_new = "生物医药";
+                        }
+                        if (model.zlist[i].product_new == 4) {
+                            model.zlist[i].product_new = "新能源";
+                        }
+                        if (model.zlist[i].product_new == 5) {
+                            model.zlist[i].product_new = "新能源汽车";
+                        }
+                        if (model.zlist[i].product_new == 6) {
+                            model.zlist[i].product_new = "高端装备制造";
+                        }
+                        if (model.zlist[i].product_new == 7) {
+                            model.zlist[i].product_new = "新材料";
+                        }
+                        if (model.zlist[i].important_type == 0) {
+                            model.zlist[i].important_type = "";
+                        }
+                        if (model.zlist[i].important_type == 1) {
+                            model.zlist[i].important_type = "省重点";
+                        }
+                        if (model.zlist[i].important_type == 2) {
+                            model.zlist[i].important_type = "常州市重点";
+                        }
+                        if (model.zlist[i].important_type == 3) {
+                            model.zlist[i].important_type = "溧阳市重点";
+                        }
+                    }
+                });
+            },
+            doList: function (rid) {
+                model.page.count = 1;
+                model.search.rid = rid;
+                window.sessionStorage.setItem('rid',rid);
+                this.list(1);
+            },
+            doList2: function () {
+                model.page.count = 1;
+                this.list(1);
+            },
+            del: function (pid) {
+                if (!confirm("此操作会删除所有的此项目所有的填报操作，确定删除吗？")) return;
+                $.ajaxPost({
+                    url: "/trace/project/del",
+                    pid: pid
+                }, function (data) {
+                    for (var i in model.zlist) {
+                        if (model.zlist[i].pid == pid) {
+                            model.zlist.splice(i, 1)   //['a','c','d']
+                        }
+                    }
+                });
+            },
+            up: function(name,rid,pageNo,index)
+            {
+                var start = (pageNo-1)*10 + index;
+                if(start == 0){
+                    alert("无法上移");
+                }else{
+                    $.ajaxPost({
+                    url: "/trace/project/up",
+                    name: name,
+                    rid: rid,
+                    start: start
+                    }, function (data) {                        
+                    });
+                }
+                if(index != 0){
+                    this.list(window.sessionStorage.getItem('pageNo'));
+                }else{
+                    this.list(window.sessionStorage.getItem('pageNo') - 1);
+                }
+            },
+            down: function(name,rid,pageNo,index)
+            {
+                var start = (pageNo-1)*10 + index;
+                $.ajaxPost({
+                url: "/trace/project/down",
+                name: name,
+                rid: rid,
+                start: start
+                }, function (data) {
+                    
+                });
+                if(index < 9){
+                    this.list(window.sessionStorage.getItem('pageNo'));
+                }else{
+                    this.list(window.sessionStorage.getItem('pageNo') + 1);
+                }
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+        if(getRequest().rid){
+            model.search.rid = getRequest().rid;
+            window.sessionStorage.setItem('rid',getRequest().rid);
+        }
+        if(window.sessionStorage.getItem('rid')){
+            model.search.rid = window.sessionStorage.getItem('rid');
+        }
+        if(window.sessionStorage.getItem('name')){
+            model.search.name = window.sessionStorage.getItem('name');
+        }
+        if(window.sessionStorage.getItem('pageNo')){
+            model.list(window.sessionStorage.getItem('pageNo'));
+            
+        }else{
+            model.list(1);
+        }
+        
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>形象进度</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span {
+            height: auto !important;
+        }
+
+        .ms-controller {
+            visibility: hidden;
+        }
+
+        .must {
+            color: red;
+            font-size: 20px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
+
+        nav li {
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title">添加形象进度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(每个月25号之后不允许填报)</div>
+        <div class="form" style="margin-top: 20px;">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">上传日期</p>
+
+                <div class="row_right" >
+                    <input style="color: #71686885;" readonly type="text" placeholder="" :duplex="detail.date">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">已完成投资</p>
+
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_all_used">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">已完成设备投资</p>
+
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device_used">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">项目进度</p>
+
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.type">
+                            <option value="">请选择进度</option>
+                            <option value="0">未开工</option>
+                            <option value="1">已开工</option>
+                            <option value="2">在建</option>
+                            <option value="3">部分投产</option>
+                            <option value="4">竣工投产</option>
+                        </select>
+
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form_double_row">
+                <div style="clear: both;"></div>
+
+                <p class="row_left">形象进度图片</p>
+
+                <div class="row_right" style="margin-top: 5px;">
+                    <div id="fileUploadContent" class="fileUploadContent">
+                        <div class="uploadBts">
+                            <div style="width: 100px;height: 100px;" :for="(index,el) in img">
+                                <img :attr="{src:el.img_url}" width="100" height="100" alt="">
+
+                                <div class="remove_img" :click="removeImg(index)">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </div>
+                            </div>
+                            <div class="chooseImg selectFileBt">
+                                <img src="/img/icon/icon_add.png" alt="">
+                                <span style="font-size: 12px;">点击添加图片</span>
+                            </div>
+
+                        </div>
+                        <div class="box"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_tips">
+                <div style="clear: both;"></div>
+                <p class="row_left"></p>
+
+                <div class="row_right" style="margin-top: 20px;font-size: 12px;">支持jpg、gif、png图片格式</div>
+            </div>
+            <br/>
+
+            <div class="form_row" style="overflow: visible;">
+                <div style="clear: both;"></div>
+                <p class="row_left">具体描述</p>
+
+                <div class="row_right">
+                    <textarea placeholder="" :duplex="detail.desc"></textarea>
+                </div>
+            </div>
+            <div class="form_row" style="margin-top: 50px;">
+                <div class="next2" :click="submit()">完成</div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css", "font-awesome.css"]);
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            detail: {
+                "type": "",
+                "desc": "",
+                "invest_all_used": "",
+                "invest_device_used": "",
+                "date": "",
+                "pid": "",
+                "img" :[]
+            },
+            "img": [],
+            submit: function () {
+                var detail = model.detail;
+                for (var i in model.img){
+                    detail.img.push(model.img[i].img_url);
+                }
+                var url = "/trace/trace/add";
+                detail.url = url;
+                $.ajaxPost(detail, function (data) {
+                    alert("操作成功");
+                    redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=4");
+                });
+            },
+            removeImg: function (index) {
+                if (!confirm("确认删除码")) return;
+
+                for (var i in model.img) {
+                    if (i == index) {
+                        model.img.splice(index, 1);
+                    }
+                }
+            },
+            getDate: function () {
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                return currentdate;
+            }
+        });
+
+        model.detail.pid = getRequest().pid;
+        model.detail.date = model.getDate();
+    });
+
+    //图片上传部分
+    require(["jquery.fileUpload"], function () {
+        $(function () {
+            $("#fileUploadContent").initUpload({
+                "uploadUrl": "/trace/system/img/upload",//上传文件信息地址
+                //"size":350,//文件大小限制，单位kb,默认不限制
+                "maxFileNumber": 5,//文件个数限制，为整数
+                "filelSavePath": "",//文件上传地址，后台设置的根目录
+                "beforeUpload": beforeUploadFun,//在上传前执行的函数
+                "onUpload": onUploadFun,//在上传后执行的函数
+                "autoCommit": true,//文件是否自动上传
+                "fileType": ['png', 'jpg', 'docx', 'doc','JPG','PNG']//文件类型限制，默认不限制，注意写的是文件后缀
+            });
+        });
+        $(function () {
+            $('#aside').height($(window).height());
+        })
+    });
+    function beforeUploadFun() {
+    }
+    function onUploadFun(opt, data) {
+        uploadTools.uploadError(opt);//显示上传错误
+        uploadTools.uploadSuccess(opt);//显示上传成功
+    }
+
+</script>
+</body>
+
+</html>

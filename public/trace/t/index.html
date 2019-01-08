@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>溧阳市重点工业项目跟踪</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+
+    <![endif]-->
+    <style>
+        .ms-controller{
+            visibility: hidden
+        }
+    </style>
+</head>
+<body style="min-width: 1200px;background: #f2f2f2;" ms-controller="root" class="ms-controller">
+<div id="aside">
+    <ms-left></ms-left>
+</div>
+<div class="main-ui clear">
+    <div class="content">
+        <ms-header></ms-header>
+        <div class="content-inner clear">
+            <div class="content-flex">
+                <div class="content-left">
+                    <!-- 主要内容 -->
+                    <iframe id="content-left-url" src="" frameborder="0" style="width: 100%" height="860px"></iframe>
+                    <!--<iframe id="content-left-url" src="" frameborder="0" style="width: 100%" height="100%"></iframe>-->
+                </div>
+            </div>
+        </div>
+        <ms-footer></ms-footer>
+    </div>
+    <ms-prompt-login></ms-prompt-login>
+    <ms-prompt-reset></ms-prompt-reset>
+</div>
+<script>
+    require(["basic","nav","baseUiIndex.css","bootstrap","font-awesome.css"]);
+    require(['avalon'],function(avalon){
+        var model = avalon.define({
+            $id: "root",
+        });
+        $(function () {
+            var url = window.location.href;
+            if(url.indexOf("#") == -1){
+                $("#content-left-url").attr("src" , "/trace/t/map/list.html");
+                return;
+            }
+            var url2 =  url.split("#");
+            if(url2.length > 0 && url2[1] !=""){
+                url = url.replace('#', '');
+                $("#content-left-url").attr("src" , url);
+            }
+/*            //1.首先设置右边iframe父高度为页面总高度
+//            xx(window.innerHeight )
+            $("#content-left-url").css("height" , window.innerHeight +"px");
+            $("#content-left-url").find("body").css("height" , window.innerHeight +"px");*/
+        });
+
+        setInterval(function () {
+            var url = window.location.href;
+            if(url.indexOf("#") == -1){
+                var sonUrl = $("#content-left-url").attr("src")
+                if(!sonUrl){
+                    $("#content-left-url").attr("src" , "/trace/t/project/list.html");
+                }
+            }else{
+                var url = window.location.href.replace('#', '');
+                var content_url = $("#content-left-url").attr("src");
+                if(url != content_url){
+                    location.reload();
+                }
+            }
+        },300);
+    });
+
+
+</script>
+</body>
+
+</html>

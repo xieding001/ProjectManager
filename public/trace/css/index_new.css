@@ -1,0 +1,134 @@
+/*营销应用*/
+.other_content{
+    width: 100%;
+}
+.other_content .application{
+	width: 100%;
+	height: 140px;
+	background: #fff;
+}
+.other_content .application ul{
+	padding:10px 0px 10px;
+}
+.other_content .application li{
+	width: 20%;
+	height: 130px;
+	margin-left: 3.8%;
+	float: left;
+	background: #fff;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.other_content .application li .p1{
+	font-size: 24px;
+    text-align: center;
+    margin-top: 30px;
+	color: #fff;
+}
+.other_content .application li .p2{
+	font-size: 16px;
+	color: #fff;
+	margin-top: 13px;
+    text-align: center;
+}
+/*中间table*/
+.table{
+    width: 98%!important;
+    margin:15px auto;
+}
+.table thead{
+    background: #66CCCE;
+}
+.table thead tr th{
+    color: #fff!important;
+    text-align: center;
+    border-bottom: none!important;
+    padding: 5px 0 !important;
+
+}
+/*表格相关*/
+.table tbody tr td{
+    height: 45px;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle!important;
+    border-bottom: 1px solid #ddd;
+    border-top: none;
+
+}
+.table tbody tr td span{
+    padding:7px 12px;
+    background: #66CCCE;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.table tbody tr .price{
+    line-height: 12px;
+}
+.table tbody tr .price .origin{
+    margin-top: 15px;
+    text-decoration: line-through;
+}
+.table tbody tr .price .now{
+    color: #FE7E68;
+}
+.list_radio1{
+    height: 20px;
+    position: relative;
+    top: 8px;
+}
+.list_radio1_div{
+    float: left;
+    width: 50%;
+    height: 45px;
+    line-height: 45px;
+}
+/*统计图*/
+.contentShapes{
+	width: 100%;
+	height: 350px;
+}
+.contentShapes .left{
+	width: 50%;
+	float: left;
+}
+.contentShapes .right{
+	width: 50%;
+	float: left;
+}
+#myChart_zhu,#myChart_zhe{
+	width: 90%;
+	margin:0 auto;
+	height: 300px;
+}
+/*@media screen and (max-width:1200px){
+    
+    #myChart_zhu canvas,#myChart_zhe canvas{
+        width: 370px!important;
+        height:300px!important;
+    }
+}
+@media screen and (min-width: 1201px) and (max-width:1320px){
+    
+    #myChart_zhu canvas,#myChart_zhe canvas{
+        width: 370px!important;
+        height:300px!important;
+    }
+}
+@media screen and (min-width: 1321px) and (max-width:1440px){
+    
+    #myChart_zhu canvas,#myChart_zhe canvas{
+        width: 370px!important;
+        height:300px!important;
+    }
+}
+@media screen and (min-width: 1441px) and (max-width:1560px){
+    
+    #myChart_zhu canvas,#myChart_zhe canvas{
+        width: 400px!important;
+        height:300px!important;
+    }
+}*/

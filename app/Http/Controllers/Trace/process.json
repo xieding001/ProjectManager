@@ -1,0 +1,103 @@
+[
+  {
+    "k": "name",
+    "v": "名称核准"
+  },
+  {
+    "k": "business_license",
+    "v": "营业执照"
+  },
+  {
+    "k": "project_register",
+    "v": "项目备案"
+  },
+  {
+    "k": "land_index",
+    "v": "土地指标"
+  },
+  {
+    "k": "construction_condition",
+    "v": "规划建设条件"
+  },
+  {
+    "k": "environment",
+    "v": "环保审批"
+  },
+  {
+    "k": "safety",
+    "v": "安全三同时"
+  },
+  {
+    "k": "energy",
+    "v": "项目节能评估审核"
+  },
+  {
+    "k": "bid_land",
+    "v": "土地招拍挂"
+  },
+  {
+    "k": "use_permit",
+    "v": "土地使用证"
+  },
+  {
+    "k": "sell_contract",
+    "v": "签订出让合同"
+  },
+  {
+    "k": "map_construct",
+    "v": "施工图审查"
+  },
+  {
+    "k": "people_record",
+    "v": "人防备案"
+  },
+  {
+    "k": "plan_permit",
+    "v": "规划许可证"
+  },
+  {
+    "k": "contract_record",
+    "v": "合同备案"
+  },
+  {
+    "k": "quality",
+    "v": "质检_安检申报"
+  },
+  {
+    "k": "construct_permit",
+    "v": "建筑工程施工许可证"
+  },
+  {
+    "k": "map_record",
+    "v": "施工图消防设计备案"
+  },
+  {
+    "k": "environment",
+    "v": "环保验收"
+  },
+  {
+    "k": "plan",
+    "v": "规划验收"
+  },
+  {
+    "k": "thunder",
+    "v": "防雷验收"
+  },
+  {
+    "k": "fire",
+    "v": "消防验收"
+  },
+  {
+    "k": "record",
+    "v": "工程竣工验收备案"
+  },
+  {
+    "k": "land",
+    "v": "国土验收"
+  },
+  {
+    "k": "real_estate",
+    "v": "不动产登记证"
+  }
+
+]

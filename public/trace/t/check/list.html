@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>直销商城 - 商城订单</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 8.3% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+
+        .vf {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">填报审核</p>
+
+            <div class="list">
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- 展示部分 -->
+        <div class="main">
+            <nav>
+                <li class="active_bg" :click="doList('')" :if="search.rid==''">所有城镇</li>
+                <li :click="doList('')" :if="search.rid!=''">所有城镇</li>
+
+                <li class="active_bg" :click="doList(11)" :if="search.rid==11">江苏中关村</li>
+                <li :click="doList(11)" :if="search.rid!=11">江苏中关村</li>
+
+                <li class="active_bg" :click="doList(4)" :if="search.rid==4">天目湖镇</li>
+                <li :click="doList(4)" :if="search.rid!=4">天目湖镇</li>
+
+                <li class="active_bg" :click="doList(7)" :if="search.rid==7">开发区(上兴)</li>
+                <li :click="doList(7)" :if="search.rid!=7">开发区(上兴)</li>
+
+                <li class="active_bg" :click="doList(8)" :if="search.rid==8">社渚镇</li>
+                <li :click="doList(8)" :if="search.rid!=8">社渚镇</li>
+
+                <li class="active_bg" :click="doList(1)" :if="search.rid==1">溧城镇</li>
+                <li :click="doList(1)" :if="search.rid!=1">溧城镇</li>
+
+                <li class="active_bg" :click="doList(3)" :if="search.rid==3">埭头镇</li>
+                <li :click="doList(3)" :if="search.rid!=3">埭头镇</li>
+
+                <li class="active_bg" :click="doList(2)" :if="search.rid==2">上黄镇</li>
+                <li :click="doList(2)" :if="search.rid!=2">上黄镇</li>
+
+                <li class="active_bg" :click="doList(10)" :if="search.rid==10">戴埠镇</li>
+                <li :click="doList(10)" :if="search.rid!=10">戴埠镇</li>
+
+                <li class="active_bg" :click="doList(5)" :if="search.rid==5">别桥镇</li>
+                <li :click="doList(5)" :if="search.rid!=5">别桥镇</li>
+
+                <li class="active_bg" :click="doList(9)" :if="search.rid==9">竹箦镇</li>
+                <li :click="doList(9)" :if="search.rid!=9">竹箦镇</li>
+
+                <li class="active_bg" :click="doList(6)" :if="search.rid==6">南渡镇</li>
+                <li :click="doList(6)" :if="search.rid!=6">南渡镇</li>
+
+                
+
+            </nav>
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>企业名称</th>
+                    <th>项目名称</th>
+                    <th>属性</th>
+                    <th>镇区</th>
+                    <th>建设情况</th>
+                    <th>进度</th>
+                    <th>总计划投资额(万元)</th>
+                    <th>已完成总投资(万元)</th>
+                    <th>形象进度</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ms-for="(i,el) in zlist">
+                    <td>{{ i+1+(page.no-1)*10 }}</td>
+                    <td>{{ el.company }}</td>
+                    <td>{{ el.name }}</td>
+                    <td class="st">
+                        <div :if="el.project_type == 1">新建</div>
+                        <div :if="el.project_type == 2">续建</div>
+                        <div :if="el.project_type == 0"></div>
+                    </td>
+                    <td>{{ el.region }}</td>
+                    <td>
+                        <div :if="el.type == 0">未开工</div>
+                        <div :if="el.type == 1">已开工</div>
+                        <div :if="el.type == 2">在建</div>
+                        <div :if="el.type == 3">部分投产</div>
+                        <div :if="el.type == 4">竣工投产</div>
+                    </td>
+                    <td>{{ el.invest_all_process }}</td>
+                    <td>{{ el.invest_all }}</td>
+                    <td>{{ el.invest_all_used }}</td>
+                    <td class="vf">{{ el.desc }}</td>
+                    <td :if="el.status == 0" style="color: #ccc;">未处理</td>
+                    <td :if="el.status == 1" style="color: green;">已通过</td>
+                    <td :if="el.status == -1" style="color: red;">已否决</td>
+
+                    <td :if="el.status == 0">
+                        <span class="look" :click="doCheck(el.id , 1)">通过</span>
+                        <span class="look" :click="doCheck(el.id , -1)">否决</span>
+                        <span class="look" :click="redict('/trace/t/#check/detail.html?id='+el.id)">详情</span>
+                    </td>
+                    <td :if="el.status == 1">
+                        <span class="look" :click="doCheck(el.id , -1)">否决</span>
+                        <span class="look" :click="redict('/trace/t/#check/detail.html?id='+el.id)">详情</span>
+                    </td>
+                    <td :if="el.status == -1">
+                        <span class="look" :click="doCheck(el.id , 1)">通过</span>
+                        <span class="look" :click="redict('/trace/t/#check/detail.html?id='+el.id)">详情</span>
+                    </td>
+                </tr>
+                <tr :visible="page.doing">
+                    <td colspan='13'>
+                        <img src="/img/loading.gif" alt="" width="40" height="40">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 分页组件 -->
+            <div style="width: 100%;text-align: center;">
+                <ul class="pagination fr" :visible="page.count > page.size">
+                    <li class="disabled">
+                        <span>总记录数：{{ page.count }}</span>
+                    </li>
+                    <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                    <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                    <!--ms-for: el in page.nums-->
+                    <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <!--ms-for-end:-->
+                    <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                    <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                </ul>
+                <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: ""
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/trace/list",
+                    pageSize: model.page.size,
+                    pageNo: model.page.no,
+                    rid: model.search.rid
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+
+                    model.zlist = data.list;
+                    if(model.zlist.length == 0){
+                        window.parent.ms_left.userInfo.check = 0;
+                    }
+                });
+            },
+            doList: function (rid) {
+                model.page.count = 1;
+                model.search.rid = rid;
+                this.list(1);
+            },
+            doCheck: function (id, status) {
+                $.ajaxPost({
+                    url: "/trace/trace/check",
+                    id: id,
+                    status: status,
+                }, function (data) {
+                    for (var i in model.zlist) {
+                        if (model.zlist[i].id == id) {
+                            model.zlist[i].status = status;
+                        }
+                    }
+                });
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+        model.list(1);
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+</script>
+</body>
+
+</html>

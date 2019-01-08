@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>发布商品</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span{
+            height: auto!important;
+        }
+        .ms-controller{visibility: hidden;}
+        .must{
+            color: red;
+            font-size: 20px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
+        nav li{
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title">编辑基本信息</div>
+        <div class="nav_out">
+            <div class="nav_out_1">
+                <nav>
+                    <li ms-attr="{class:show_type==1?'active_bg':''}" :click="show_type=1">基本信息</li>
+                    <li ms-attr="{class:show_type==2?'active_bg':''}" :click="show_type=2">投资和进度</li>
+                    <!--<li ms-attr="{class:show_type==3?'active_bg':''}" :click="show_type=3">其他</li>-->
+                </nav>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+        <div class="form" :visible="show_type==1">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">企业名称</p>
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.company">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">企业联系人</p>
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.company_user">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">企业联系方式</p>
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.company_contact">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">项目名称</p>
+                <div class="row_right">
+                    <input type="text" placeholder="" :duplex="detail.name">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">重点类型</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.important_type">
+                            <option value="0">请选择</option>
+                            <option value="1">省重点</option>
+                            <option value="2">常州市重点</option>
+                            <option value="3">溧阳市重点</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">镇区</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.rid">
+                            <option value="0">请选择镇区</option>
+                            <option :for="el in region" ms-attr="{value:el.id,selected:detail.rid==el.id?true:false}">{{ el.region_name }}</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">用地性质</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.area_type">
+                            <option value="1">新增用地</option>
+                            <option value="2">收购盘活</option>
+                            <option value="3">租用</option>
+                            <option value="4">不需用地</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">属性</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.project_type">
+                            <option value="0">请选择</option>
+                            <option value="1">新建</option>
+                            <option value="2">续建</option>
+                            <!--<option value="3">新增</option>-->
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">新兴产业</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.product_new">
+                            <option value="0">请选择</option>
+                            <option value="1">节能环保</option>
+                            <option value="2">新一代信息技术</option>
+                            <option value="3">生物医药</option>
+                            <option value="4">新能源</option>
+                            <option value="5">新能源汽车</option>
+                            <option value="6">高端装备制造</option>
+                            <option value="7">新材料</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">四大重点发展产业</p>
+                <div class="row_right">
+                    <div class="select-parent">
+                        <select :duplex="detail.product_important">
+                            <option value="0">请选择</option>
+                            <option value="1">动力电池</option>
+                            <option value="2">智能电网</option>
+                            <option value="3">汽车及零部件</option>
+                            <option value="4">农牧与饲料机械</option>
+                        </select>
+                        <div class="arrow_wrapper">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">总规划用地面积(亩)</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（亩）" :duplex="detail.area_all">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">规划新建/租用建筑面积</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（平方米）" :duplex="detail.area_work">
+                </div>
+            </div>
+            <!--<div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">规划新建厂房面积</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（平方米）" :duplex="detail.area_plant">
+                </div>
+            </div>-->
+            <!--<div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">已建厂房面积</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（平方米）" :duplex="detail.area_plant_build">
+                </div>
+            </div>-->
+            <div class="form_row" style="overflow: visible;margin-top: 10px;">
+                <div style="clear: both;"></div>
+                <p class="row_left">具体描述</p>
+                <div class="row_right">
+                    <textarea placeholder="" :duplex="detail.desc"></textarea>
+                </div>
+            </div>
+            <div class="form_row" style="margin-top: 70px;">
+                <div class="next2" :click="show_type=2">下一步</div>
+            </div>
+        </div>
+
+        <div class="form" :visible="show_type==2">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">计划总投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_all">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">计划设备总投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">截止上年度底完成投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_pre">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">截止上年度底完成设备总投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device_pre">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">本年度计划总投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_now">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">本年度计划设备总投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device_now">
+                </div>
+            </div>
+
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">进口设备投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device_import">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">智能化设备投资</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invest_device_smart">
+                </div>
+            </div>
+
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">开工日期</p>
+                <div class="row_right">
+                    <input type="text" readonly placeholder="" :duplex="detail.date_begin" id="inpstart">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">投产日期</p>
+                <div class="row_right">
+                    <input type="text" readonly placeholder="" :duplex="detail.date_invest" id="inpend">
+                </div>
+            </div>
+
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">项目达产产能</p>
+                <div class="row_right">
+                    <input type="text" placeholder="请描述" :duplex="detail.guess_capacity">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">预计实现年销售</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.guess_sale">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">预计年利税</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.tax">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">利润</p>
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.profit">
+                    <!--<span class="must">*</span>-->
+                </div>
+            </div>
+
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <div class="next2" :click="submit()">完成</div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css","font-awesome.css"]);
+    require(['avalon'],function(avalon){
+        model = avalon.define({
+            $id: "root",
+            detail:{
+                "rid": "",
+                "name": "",
+                "desc":"",
+                "company": "",
+                "company_user": "",
+                "company_contact": "",
+                "important_type":"",
+                "invest_all": "",
+                "invest_pre": "",
+                "invest_now": "",
+                "invest_device_now": "",
+                "invest_device": "",
+                "invest_device_smart": "",
+                "invest_device_import": "",
+                "invest_device_pre":"",
+                "product_important": 0,
+                "product_new": 0,
+                "area_type": 1,
+                "project_type": "",
+                "area_all": "",
+                "area_plant": "",
+                "area_plant_build": "",
+                "area_work": "",
+                "date_begin":"",
+                "date_invest":"",
+                "guess_sale":"",
+                "guess_capacity":"",
+                "tax":"",
+                "profit":""
+            },
+            region:[],
+            show_type:1,
+            getDetail:function (pid) {
+                $.ajaxGet({
+                    url :"/trace/project/detail",
+                    pid :pid
+                },function (data) {
+                    model.detail = data.detail;
+                });
+            },
+            getRegion:function () {
+                $.ajaxGet({
+                    url :"/trace/project/region",
+                },function (data) {
+                    model.region = data.list;
+                });
+            },
+            submit:function () {
+                if(model.verify() == 1) return;
+                var detail = model.detail;
+                if(!detail.pid){
+                    var url = "/trace/project/add";
+                }else{
+                    var url = "/trace/project/edit";
+                }
+                detail.url = url;
+                $.ajaxPost(detail,function (data) {
+                    alert("操作成功");
+                    window.history.back();
+                });
+            },
+            verify:function(){
+                if(!model.detail.name){
+                    model.show_type = 1;
+                    alert("项目名称不能为空。");
+                    return 1;
+                }
+                if(!model.detail.company){
+                    model.show_type = 1;
+                    alert("公司名称不能为空。");
+                    return 1;
+                }
+                return 0;
+            }
+        });
+
+        var pid = getRequest().pid;
+        if(pid){
+            model.getDetail(pid);
+        }
+        model.getRegion();
+        $("input").keydown(function(e){
+                //上
+            if(e.keyCode==38){
+                if($(this).attr("type") == "number"){
+                    $(this).val(parseInt($(this).val())-1);
+                }
+                this.blur();
+                if($(this).parent().parent().prev().find("input").length > 0){
+                    $(this).parent().parent().prev().find("input")[0].focus();
+                }
+            }
+            //下
+            if(e.keyCode==40){
+                if($(this).attr("type") == "number"){
+                    $(this).val(parseInt($(this).val())+1);
+                }
+                this.blur();
+                if($(this).parent().parent().next().find("input").length > 0){
+                    $(this).parent().parent().next().find("input")[0].focus();
+                }
+            }
+
+        });
+
+    });
+    require(["jquery.jedate"] , function () {
+        $(function () {
+            //日期选择
+            var start = {
+                format: 'YYYY-MM',
+                minDate: '2014-06-16', //设定最小日期为入驻日期
+                maxDate: '2030-12-31', //最大日期
+                okfun: function(obj){
+//                    end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
+                }
+            };
+            var end = {
+                format: 'YYYY-MM',
+                maxDate: '2030-12-31', //最大日期
+                okfun: function(obj){
+//                    start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
+                }
+            };
+            $('#inpstart').jeDate(start);
+            $('#inpend').jeDate(end);
+        });
+    });
+
+</script>
+</body>
+
+</html>

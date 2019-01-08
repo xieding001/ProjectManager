@@ -1,0 +1,112 @@
+/*侧边栏*/
+/*下载部分*/
+.download{
+    width: 100%;
+    height: 170px;
+    background: #F8F8F8;
+}
+.download div{
+    float: left;
+}
+.download .l{
+    width: 50%;
+}
+.download .r{
+    width: 50%;
+}
+.download div img{
+    display: block;
+    margin:10px auto;
+}
+.download div .p1{
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+.download div .p2{
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+}
+.download .r p,.download .l p{
+    width: 80%;
+    margin:10px auto;
+    height: 25px;
+    background: #1AC8B5;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    line-height: 25px;
+}
+/*图片轮播部分*/
+.contentImg{
+    width: 100%;
+    margin-top: 20px;
+}
+.contentImg img{
+    width: 100%;
+}
+/*新手上路和公告部分*/
+.newsList{
+    padding-left: 15px;
+}
+.newsList .title{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 25px 0 0;
+    margin:0;
+}
+.newsList ul li{
+    font-size: 14px;
+    color: #666;
+    padding-top: 8px;
+}
+.newsList ul li .name{
+    font-size: 13px;
+    float: left;
+    margin: 0;
+    /*width: 180px;*/
+}
+.newsList ul li .time{
+    font-size: 13px;
+    float: right;
+    color: #999;
+    margin: 0;
+}
+/*联系我们*/
+.connect,.feedback{
+    width: 100%;
+    height: 120px;
+    background: #F2F2F2;
+    margin-top: 20px;
+}
+.connect img{
+    float: left;
+    margin:20px 0 0 20px;
+}
+.feedback img{
+    float: left;
+    margin:20px 0 0 20px;
+}
+.connect .contentMs{
+    float: left;
+    height: 50px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.feedback .contentMs{
+    padding-top: 20px;
+    float: left;
+    margin-left: -10px;
+    width: 100px;
+}
+.connect .contentMs p:nth-child(1),.feedback .contentMs p:nth-child(1){
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #000;
+}
+.connect .contentMs p:nth-child(2){
+    font-size: 13px;
+    color: #666;
+}

@@ -1,0 +1,154 @@
+.main-contain{
+	height: auto !important;
+	background-color: #fff;
+}
+.main-contain .title{
+	width: 98%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 2%;
+    border-bottom: 1px solid #66cccc;
+    margin: 0 auto;
+    font-weight: bold;
+}
+.item_box{
+	width: 100%;
+	height: auto;
+	margin-bottom: 10px;
+	float: left;
+}
+.item_box .table_body{
+	width: 80%;
+	float: left;
+}
+.item_box .table{
+	margin-bottom: 0 !important;
+}
+.main-contain .order_title{
+	width: 15%;
+	color: #000;
+	height: 100%;
+	text-align: center;
+	font-size: 14px;
+	float: left;
+	font-weight: bold;
+	display: inline-block;
+	line-height: 30px;
+}
+.main-contain .order_main{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	/*margin-top: 10px;*/
+	/*padding: 10px 20px 20px 44px;*/
+	box-sizing: border-box;
+	float: left;
+}
+.main-contain .order_main .order_ul,.return_ul{
+	width: 80%;
+	display: inline-block;
+	height: 100%;
+	border: 1px solid #ddd;
+	padding: 10px 25px 0 25px;
+	box-sizing: border-box;
+}
+.main-contain .order_main .order_ul li{
+	/*height: 30px;*/
+}
+.main-contain .order_main .order_ul li p:nth-child(1){
+	width: 200px;
+	text-align: right;
+	padding-right: 30px;
+	/*text-align: */
+}
+.main-contain .order_main .order_ul p{
+	display: inline-block;
+}
+/*收货信息*/
+.get_title{
+	padding: 15px 0 10px 0;
+}
+/*商品信息*/
+.mytable table{
+	width: 100%;
+	border: 1px solid #ddd;
+	margin-top: 0 !important;
+}
+.mytable table th{
+	height: 30px;
+	color: #fff;
+	border: 0;
+	background-color: #66CCCE;
+	border-bottom: 1px solid #ddd;
+}
+.mytable table th,table td{
+	text-align: center;
+	border: 1px solid #ddd;
+}
+.mytable table td{
+	height: 100px;
+	width: 20%;
+}
+.mytable table .goods_detail{
+	width: 100%;
+	height: 100%;
+}
+.mytable table .goods_detail .img_box{
+	width: 100px;
+	height: 90px;
+	float: left;
+	margin-top: 4px;
+	margin-left: 8px;
+	display: inline-block;
+	border: 1px solid #ddd;
+}
+.mytable table .goods_detail .img_box img{
+	width: 100px;
+	height: 90px;
+}
+.mytable table .goods_detail .goods_text{
+	height: 100%;
+	width: 100%;
+	text-align: left;
+	text-align: center;
+	padding: 20px 0 0 20px;
+	box-sizing: border-box;
+}
+/*订单退款操作日志*/
+.return_ul p{
+	display: inline-block;
+}
+.return_ul .time,.return_ul .state{
+	color: #333;
+}
+.return_ul .state{
+	padding: 0 50px;
+}
+.return_ul .cause{
+	color: #169BDB;
+}
+.order_img{
+	width: 80%;
+	margin: auto;
+}
+.order_img li{
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.order_img li img{
+	width: 100px;
+	height: 100px;
+	color: #1B4CE8;
+}
+.order_ul2{
+	float: left;
+}
+.order_ul2 li{
+	width: 20% !important;
+}
+.order_ul2 li img{
+	width: 90% !important;
+	height: 180px !important;
+	margin: auto;
+}

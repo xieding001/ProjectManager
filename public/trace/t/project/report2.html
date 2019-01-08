@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>验收进度 - 进度报告</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .input-line{
+            width: 96%;
+            height: 30px;
+            line-height: 30px;
+            overflow: auto;
+            border: solid 1px #ddd;
+            border-radius: 5px;
+            /*margin-top: 10px;*/
+        }
+        .text-line{
+            width: 96%;
+            height: 70px;
+            line-height: 30px;
+            overflow: hidden;
+            border: solid 1px #ddd;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root" class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">验收进度 > 进度报告</p>
+
+            <div class="clear"></div>
+        </div>
+        <!-- 展示部分 -->
+        <div class="main">
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>受理部门</th>
+                    <!--<th>需要提供的主要材料</th>-->
+                    <th>备注</th>
+                    <th>上传办理日期</th>
+                    <th>结束时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><textarea class="text-line" ms-duplex="detail.title"></textarea></td>
+                    <td><textarea class="text-line" ms-duplex="detail.department"></textarea></td>
+                    <!--<td><textarea class="text-line" ms-duplex="detail.material"></textarea></td>-->
+                    <td><textarea class="text-line" ms-duplex="detail.remark"></textarea></td>
+                    <td><input readonly id="inpstart" type="text" class="input-line" style="width: 100px;" ms-duplex="detail.time_begin"></td>
+                    <td><input readonly id="inpend" type="text" class="input-line" style="width: 100px;" ms-duplex="detail.time_end"></td>
+                    <td><span class="look" :click="apply()">上传</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'],function(avalon){
+        var model = avalon.define({
+            $id: "root",
+            detail:{
+                "title":"",
+                "department":"",
+                "material":"",
+                "remark":"",
+                "time_begin":"",
+                "time_end":"",
+            },
+            pid:"",
+            type:"",
+            show:"",
+            getDetail:function () {
+                $.ajaxGet({
+                    url :"/trace/process/apply/detail",
+                    pid:model.pid,
+                    type:model.type
+                },function (data) {
+                    if(data.detail) model.detail = data.detail;
+                });
+            },
+            apply: function () {
+                var detail = model.detail;
+                detail.url = "/trace/process/apply/do2";
+                detail.pid = model.pid;
+                detail.type = model.type;
+                if (jsonEmptyVerify(detail, [
+                            {"k": "title", "v": "名称不能为空"},
+                            {"k": "department", "v": "部门不能为空"},
+                            {"k": "time_begin", "v": "开始时间不能为空"},
+                        ])) return;
+                $.ajaxPost(detail,function (data) {
+                    alert("操作成功");
+                    model.redict("/trace/t/#project/detail.html?pid="+model.pid+"&show="+model.show);
+                });
+            },
+            redict:function (url) {
+                redict_iframe(url);
+            }
+        });
+        model.pid = getRequest().id;
+        model.type = getRequest().type;
+        model.show = getRequest().show;
+
+        model.getDetail();
+    });
+    require(["baseUiIndex.css","bootstrap"]);
+    require(["jquery.jedate"] , function () {
+        $(function () {
+            //日期选择
+            var start = {
+                format: 'YYYY-MM-DD',
+                minDate: '2014-06-16', //设定最小日期为入驻日期
+                maxDate: '2030-12-31', //最大日期
+                okfun: function(obj){
+                    end.minDate = obj.val; //开始日选好后，重置结束日的最小日期
+                    endDates();
+                }
+            };
+            var end = {
+                format: 'YYYY-MM-DD',
+                maxDate: '2030-12-31', //最大日期
+                okfun: function(obj){
+                    start.maxDate = obj.val; //将结束日的初始值设定为开始日的最大日期
+                }
+            };
+            function endDates() {
+                //将结束日期的事件改成 false 即可
+                end.trigger = false;
+                $("#inpend").jeDate(end);
+            }
+            $('#inpstart').jeDate(start);
+            $('#inpend').jeDate(end);
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

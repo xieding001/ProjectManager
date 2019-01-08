@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>直销商城 - 商城订单</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 7.69% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">项目跟踪</p>
+
+            <div class="list">
+                <div class="dw_filter dw_filter on" style="margin-bottom: 0px;">
+                    <div class="el on">
+                        <span class="title">项目名称：</span>
+
+                        <div class="getr">
+                            <input type="text" name="keyword" placeholder="请输入项目名称" maxlength="200"
+                                   :duplex="search.name">
+                        </div>
+                        <div class="btnbox" style="margin-top: -28px;">
+                            <span class="p_but" :click="doList2()">搜索</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- 展示部分 -->
+        <div class="main" style="margin-top: -20px;">
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>企业名称</th>
+                    <th>项目名称</th>
+                    <th>属性</th>
+                    <th>镇区</th>
+                    <th>建设情况</th>
+                    <th>总规划用地面积(亩)</th>
+                    <th>总计划投资额(万元)</th>
+                    <th>设备投资额(万元)</th>
+                    <th>已完成投资额(万元)</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ms-for="(i,el) in zlist">
+                    <td>{{ i+1+(page.no-1)*10 }}</td>
+                    <td style="text-align:left">{{ el.company }}</td>
+                    <td style="text-align:left">{{ el.name }}</td>
+                    <td class="st">
+                        <div :if="el.project_type == 1">新建</div>
+                        <div :if="el.project_type == 2">续建</div>
+                        <div :if="el.project_type == 0"></div>
+                    </td>
+                    <td>{{ el.region }}</td>
+                    <td>
+                        <div :if="el.process == 0">未开工</div>
+                        <div :if="el.process == 1">已开工</div>
+                        <div :if="el.process == 2">在建</div>
+                        <div :if="el.process == 3">部分投产</div>
+                        <div :if="el.process == 4">竣工投产</div>
+                    </td>
+                    <td>{{ el.area_all }}</td>
+                    <td>{{ el.invest_all }}</td>
+                    <td>{{ el.invest_device }}</td>
+                    <td>{{ el.invest_all_used }}</td>
+                    <td>
+                        <span class="look" :click="redict('/trace/t/#project/detail.html?pid='+el.pid)">编辑</span>
+                    </td>
+                </tr>
+                <tr :visible="page.doing">
+                    <td colspan='13'>
+                        <img src="/img/loading.gif" alt="" width="40" height="40">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 分页组件 -->
+            <div style="width: 100%;text-align: center;">
+                <ul class="pagination fr" :visible="page.count > page.size">
+                    <li class="disabled">
+                        <span>总记录数：{{ page.count }}</span>
+                    </li>
+                    <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                    <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                    <!--ms-for: el in page.nums-->
+                    <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <!--ms-for-end:-->
+                    <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                    <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                </ul>
+                <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: '',
+                name:"",
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/project/list",
+                    rid: model.search.rid,
+                    name: model.search.name,
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+
+                    model.zlist = data.list;
+                });
+            },
+            doList: function (rid) {
+                model.page.count = 1;
+                model.search.rid = rid;
+                this.list(1);
+            },
+            doList2:function(){
+                model.page.count = 1;
+                this.list(1);
+            },
+
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+        model.list(1);
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+</script>
+</body>
+
+</html>

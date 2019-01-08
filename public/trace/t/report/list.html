@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>直销商城 - 商城订单</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 7.69% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">项目报告</p>
+
+            <div class="list">
+                <div class="dw_filter dw_filter on">
+                    <div ms-visible="search.show">
+                        <div class="el on">
+                            <span class="title">乡镇：</span>
+                            <!--<span class="more dicon Dm">更多</span>-->
+                            <ul>
+                                <li :click="multiple('','region')" ms-attr="{class:search.region==''?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>所有</a>
+                                </li>
+                                <li :click="multiple(11,'region')"
+                                    ms-attr="{class:search.region.indexOf('11')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>江苏中关村</a>
+                                </li>
+                                <li :click="multiple(4,'region')"
+                                    ms-attr="{class:search.region.indexOf('4')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>天目湖镇</a>
+                                </li>
+                                <li :click="multiple(7,'region')"
+                                    ms-attr="{class:search.region.indexOf('7')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>经开区(上兴)</a>
+                                </li>
+
+                                <li :click="multiple(8,'region')"
+                                    ms-attr="{class:search.region.indexOf('8')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>社渚镇</a>
+                                </li>
+                                
+                                <li :click="multiple('01','region')"
+                                    ms-attr="{class:search.region.indexOf('01')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>溧城镇</a>
+                                </li>
+                                <li :click="multiple(3,'region')"
+                                    ms-attr="{class:search.region.indexOf('3')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>埭头镇</a>
+                                </li>
+                                <li :click="multiple(2,'region')"
+                                    ms-attr="{class:search.region.indexOf('2')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>上黄镇</a>
+                                </li>
+                                <li :click="multiple(10,'region')"
+                                    ms-attr="{class:search.region.indexOf('10')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>戴埠镇</a>
+                                </li>
+                                <li :click="multiple(5,'region')"
+                                    ms-attr="{class:search.region.indexOf('5')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>别桥镇</a>
+                                </li>
+                                <li :click="multiple(9,'region')"
+                                    ms-attr="{class:search.region.indexOf('9')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>竹箦镇</a>
+                                </li>
+                                <li :click="multiple(6,'region')"
+                                    ms-attr="{class:search.region.indexOf('6')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>南渡镇</a>
+                                </li>
+                            </ul>
+                            <div class="clear"></div>
+                            <div class="err" style="display:none">最多只能选择5项</div>
+                        </div>
+                        <div class="el on">
+                            <span class="title">属性：</span>
+                            <!--<span class="more dicon Dm">更多</span>-->
+                            <ul>
+                                <li :click="multiple('','project_types')" ms-attr="{class:search.project_types==''?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>所有</a>
+                                </li>
+                                <li :click="multiple(1,'project_types')"
+                                    ms-attr="{class:search.project_types.indexOf('1')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>新建</a>
+                                </li>
+                                <li :click="multiple(2,'project_types')"
+                                    ms-attr="{class:search.project_types.indexOf('2')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>续建</a>
+                                </li>
+                                <!-- <li :click="multiple(3,'area_type')"
+                                     ms-attr="{class:search.area_type.indexOf('3')>-1?'on':''}">
+                                     <a href="javascript:;"><em class="check"></em>新增</a>
+                                 </li>-->
+                            </ul>
+                        </div>
+                        <div class="el on">
+                            <div style="width:300px;margin=left" class="title">四大产业：</div>
+                            <ul>
+                                <li :click="multiple('','product_important')"
+                                    ms-attr="{class:search.product_important==''?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>所有</a>
+                                </li>
+                                <li :click="multiple(1,'product_important')"
+                                    ms-attr="{class:search.product_important.indexOf('1')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>动力电池</a>
+                                </li>
+                                <li :click="multiple(2,'product_important')"
+                                    ms-attr="{class:search.product_important.indexOf('2')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>智能电网</a>
+                                </li>
+                                <li :click="multiple(3,'product_important')"
+                                    ms-attr="{class:search.product_important.indexOf('3')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>汽车及零部件</a>
+                                </li>
+                                <li :click="multiple(4,'product_important')"
+                                    ms-attr="{class:search.product_important.indexOf('4')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>农牧与饲料机械</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="el on">
+                            <span class="title">建设情况：</span>
+                            <ul>
+                                <li :click="multiple('','product_type')"
+                                    ms-attr="{class:search.product_type==''?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>所有</a>
+                                </li>
+                                <li :click="multiple(0,'product_type')"
+                                    ms-attr="{class:search.product_type.indexOf('0')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>未开工</a>
+                                </li>
+                                <li :click="multiple(1,'product_type')"
+                                    ms-attr="{class:search.product_type.indexOf('1')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>已开工</a>
+                                </li>
+                                <li :click="multiple(2,'product_type')"
+                                    ms-attr="{class:search.product_type.indexOf('2')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>在建</a>
+                                </li>
+                                <li :click="multiple(3,'product_type')"
+                                    ms-attr="{class:search.product_type.indexOf('3')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>部分投产</a>
+                                </li>
+                                <li :click="multiple(4,'product_type')"
+                                    ms-attr="{class:search.product_type.indexOf('4')>-1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>竣工投产</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="el on">
+                            <span class="title">年份查询：</span>
+                            <!--<span class="more dicon Dm">更多</span>-->
+                            <ul>
+                                <li :click="single(2017,'year')" ms-attr="{class:search.year==2017?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>2017年</a>
+                                </li>
+                                <li :click="single(2018,'year')" ms-attr="{class:search.year==2018?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>2018年</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="el on">
+                            <span class="title">月份查询：</span>
+                            <!--<span class="more dicon Dm">更多</span>-->
+                            <ul>
+                                <li :click="single('','month')" ms-attr="{class:search.month==''?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>所有</a>
+                                </li>
+                                <li :click="single('01','month')" ms-attr="{class:search.month==1?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>1月</a>
+                                </li>
+                                <li :click="single('02','month')" ms-attr="{class:search.month==2?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>2月</a>
+                                </li>
+                                <li :click="single('03','month')" ms-attr="{class:search.month==3?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>3月</a>
+                                </li>
+                                <li :click="single('04','month')" ms-attr="{class:search.month==4?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>4月</a>
+                                </li>
+                                <li :click="single('05','month')" ms-attr="{class:search.month==5?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>5月</a>
+                                </li>
+                                <li :click="single('06','month')" ms-attr="{class:search.month==6?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>6月</a>
+                                </li>
+                                <li :click="single('07','month')" ms-attr="{class:search.month==7?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>7月</a>
+                                </li>
+                                <li :click="single('08','month')" ms-attr="{class:search.month==8?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>8月</a>
+                                </li>
+                                <li :click="single('09','month')" ms-attr="{class:search.month==9?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>9月</a>
+                                </li>
+                                <li :click="single(10,'month')" ms-attr="{class:search.month==10?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>10月</a>
+                                </li>
+                                <li :click="single(11,'month')" ms-attr="{class:search.month==11?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>11月</a>
+                                </li>
+                                <li :click="single(12,'month')" ms-attr="{class:search.month==12?'on':''}">
+                                    <a href="javascript:;"><em class="check"></em>12月</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="el on">
+                            <span class="title">总计划投资额：</span>
+
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（万元）" maxlength="100"
+                                       :duplex="search.invest_1">
+                            </div>
+                            <div class="between">--</div>
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（万元）" maxlength="100"
+                                       :duplex="search.invest_2">
+                            </div>
+                        </div>
+                        <div class="el on">
+                            <span class="title">用地面积：</span>
+
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（亩）" maxlength="100"
+                                       :duplex="search.area_1">
+                            </div>
+                            <div class="between">--</div>
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（亩）" maxlength="100"
+                                       :duplex="search.area_2">
+                            </div>
+                        </div>
+                        <div class="el on">
+                            <span class="title">项目进度：</span>
+
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（万元）" maxlength="100"
+                                       :duplex="search.process_1">
+                            </div>
+                            <div class="between">--</div>
+                            <div class="getr getr2">
+                                <input type="text" name="keyword" placeholder="单位（万元）" maxlength="100"
+                                       :duplex="search.process_2">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="el on">
+                        <span class="title">企业名称：</span>
+
+                        <div class="getr">
+                            <input type="text" name="keyword" placeholder="请输入企业名称" maxlength="200"
+                                   :duplex="search.company">
+                        </div>
+                        <div class="btnbox" style="margin-top: -28px;">
+                            <span class="p_but" :click="doList()">搜索</span>
+                        </div>
+                    </div>
+                    <div class="el on">
+                        <span class="title">导出设置：</span>
+                        <ul>
+                            <li :click="output('id')"
+                                ms-attr="{class:fields.indexOf('id')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>序号</a>
+                            </li>
+                            <li :click="output('company')"
+                                ms-attr="{class:fields.indexOf('company')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>项目实施单位</a>
+                            </li>
+                            <li :click="output('contact')"
+                                ms-attr="{class:fields.indexOf('contact')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>企业联系人</a>
+                            </li>
+                            <li :click="output('name,desc')"
+                                ms-attr="{class:fields.indexOf('name,desc')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>项目名称及内容</a>
+                            </li>
+                            <li :click="output('years_all')"
+                                ms-attr="{class:fields.indexOf('years_all')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>建设年限</a>
+                            </li>
+                            <li :click="output('project_type')"
+                                ms-attr="{class:fields.indexOf('project_type')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>属性</a>
+                            </li>
+                            <li :click="output('invest_all')"
+                                ms-attr="{class:fields.indexOf('invest_all')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>计划总投资</a>
+                            </li>
+                            <li :click="output('invest_device')"
+                                ms-attr="{class:fields.indexOf('invest_device')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>总设备投资</a>
+                            </li>
+                            <li :click="output('year_2017')" ms-attr="{class:fields.indexOf('year_2017')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>2017累计完成投资</a>
+                            </li>
+                            <li :click="output('year_2018')" ms-attr="{class:fields.indexOf('year_2018')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>2018计划投资</a>
+                            </li>
+                            <li :click="output('device_2018')"
+                                ms-attr="{class:fields.indexOf('device_2018')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>2018设备投资</a>
+                            </li>
+                            <li :click="output('all_used')"
+                                ms-attr="{class:fields.indexOf('all_used')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>已完成投资</a>
+                            </li>
+                            <li :click="output('device_used')"
+                                ms-attr="{class:fields.indexOf('device_used')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>其中设备投资</a>
+                            </li>
+                            <li :click="output('trace_desc')"
+                                ms-attr="{class:fields.indexOf('trace_desc')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>目前进度</a>
+                            </li>
+                            <li :click="output('trace_type')"
+                                ms-attr="{class:fields.indexOf('trace_type')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>建设情况</a>
+                            </li>
+                            <li :click="output('region')" ms-attr="{class:fields.indexOf('region')>-1?'on':''}">
+                                <a href="javascript:;"><em class="check"></em>镇区</a>
+                            </li>
+                            <li>
+                                <span class="p_but" :click="doOutput()"
+                                      style="width: 30px;line-height: 12px;margin-top: 4px;padding: 3px 0;text-align: center;">导出</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="op" :click="search.show = 0" ms-visible="search.show">
+                        <span style="font-size: 12px;">收起选项<em class="dicon Dm"></em></span>
+                    </div>
+                    <div class="op op2" :click="search.show = 1;" ms-visible="!search.show">
+                        <span style="font-size: 12px;">展开选项<em class="dicon Dm"></em></span>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- 展示部分 -->
+            <div class="main" style="margin-top: -10px;">
+                <!-- 表格部分 -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>企业名称</th>
+                        <th>项目名称</th>
+                        <th>属性</th>
+                        <th>镇区</th>
+                        <th>建设情况</th>
+                        <th>总计划投资额(万元)</th>
+                        <th>总规划用地面积(亩)</th>
+                        <th>设备投资额(万元)</th>
+                        <th>已完成投资额(万元)</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ms-for="(i,el) in zlist">
+                        <td>{{ i+1+(page.no-1)*9 }}</td>
+                        <td style="text-align:left">{{ el.company }}</td>
+                        <td style="text-align:left">{{ el.name }}</td>
+                        <td class="st">
+                            <div :if="el.project_type == 1">新建</div>
+                            <div :if="el.project_type == 2">续建</div>
+                            <div :if="el.project_type == 0"></div>
+                        </td>
+                        <td>{{ el.region }}</td>
+                        <td>
+                            <div :if="el.process == 0">未开工</div>
+                            <div :if="el.process == 1">已开工</div>
+                            <div :if="el.process == 2">在建</div>
+                            <div :if="el.process == 3">部分投产</div>
+                            <div :if="el.process == 4">竣工投产</div>
+                        </td>
+                        <td>{{ el.invest_all }}</td>
+                        <td>{{ el.area_all }}</td>
+                        <td>{{ el.invest_device }}</td>
+                        <td>{{ el.invest_all_used_month }}</td>
+                        <td>
+                            <span class="look" :click="redict('/trace/t/#report/detail.html?pid='+el.pid)">详情</span>
+                            <!--<span class="look" :click="redict('/t/#project/detail.html?pid='+el.pid)">填报</span>-->
+                        </td>
+                    </tr>
+                    <tr :visible="page.doing">
+                        <td colspan='13'>
+                            <img src="/img/loading.gif" alt="" width="40" height="40">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!-- 分页组件 -->
+                <div style="width: 100%;text-align: center;margin-top: -10px;">
+                    <ul class="pagination fr" :visible="page.count > page.size">
+                        <li class="disabled">
+                            <span>总记录数：{{ page.count }}</span>
+                        </li>
+                        <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                        <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                        <!--ms-for: el in page.nums-->
+                        <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                        <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                        <!--ms-for-end:-->
+                        <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                        <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                    </ul>
+                    <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: [],
+                show: 1,
+                region: "",
+                product_important:"",
+                project_types: "",
+                product_type: "",
+                year: 2018,
+                month: "",
+                invest_1: "",
+                invest_2: "",
+                area_1: "",
+                area_2: "",
+                process_1: "",
+                process_2: "",
+                company: ""
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 9,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            fields: 'id,company,contact,name,desc,years_all,product_important,project_type,invest_all,year_2018,year_2017,device_2018,all_used,device_used,trace_desc,trace_type,region,invest_device',
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/report/list",
+                    search: JSON.stringify(model.search),
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+
+                    model.zlist = data.list;
+                });
+            },
+            doList: function () {
+                model.page.count = 1;
+                this.list(1);
+            },
+            multiple: function (id, type) {
+                id = id.toString();
+                if (id == '') {
+                    model.search[type] = '';
+                } else {
+                    var region = model.search[type].split(",");
+                    if (model.search[type].indexOf(id) > -1) {
+                        for (var i in region) {
+                            if (region[i] == id) {
+                                region.splice(i, 1)
+                            }
+                        }
+                    } else {
+                        region.push(id);
+                    }
+                    for (var i in region) {
+                        if (!region[i]) {
+                            region.splice(i, 1)
+                        }
+                    }
+                    model.search[type] = region.join(",");
+                }
+            },
+            single: function (id, type) {
+                model.search[type] = id;
+            },
+            output: function (fields) {
+                if (model.fields) {
+                    if (model.fields.indexOf(fields) > -1) {
+                        model.fields = model.fields.replace("," + fields, '');
+                        model.fields = model.fields.replace(fields, '');
+                    } else {
+                        model.fields = model.fields + "," + fields;
+                    }
+                } else {
+                    model.fields = model.fields + fields;
+                }
+            },
+            doOutput: function () {
+                parent.location.href = "/trace/report/export?fields=" + model.fields + "&search=" + JSON.stringify(model.search);
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+        model.list(1);
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+    function checkMultipleChoice() {
+
+    }
+</script>
+
+
+</body>
+
+</html>

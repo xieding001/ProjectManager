@@ -1,0 +1,100 @@
+{
+  "title": "业务审批流程",
+  "nodes": {
+    "real_estate": {
+      "name": "不动产登记证",
+      "left": 410,
+      "top": 282,
+      "type": "fork",
+      "width": 106,
+      "height": 27,
+      "alt": true
+    },
+    "land": {
+      "name": "国土验收",
+      "left": 414,
+      "top": 223,
+      "type": "fork",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "plan": {
+      "name": "规划验收",
+      "left": 413,
+      "top": 93,
+      "type": "fork",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "environment": {
+      "name": "环保验收",
+      "left": 275,
+      "top": 94,
+      "type": "fork",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "fire": {
+      "name": "消防验收",
+      "left": 545,
+      "top": 93,
+      "type": "fork",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "record": {
+      "name": "工程竣工验收备案",
+      "left": 398,
+      "top": 167,
+      "type": "fork",
+      "width": 132,
+      "height": 27,
+      "alt": true
+    }
+  },
+  "lines": {
+    "demo2_line_52": {
+      "type": "sl",
+      "from": "record",
+      "to": "land",
+      "name": ""
+    },
+    "demo2_line_53": {
+      "type": "sl",
+      "from": "land",
+      "to": "real_estate",
+      "name": ""
+    },
+    "demo2_line_54": {
+      "type": "tb",
+      "from": "environment",
+      "to": "record",
+      "name": "",
+      "alt": true,
+      "M": 144
+    },
+    "demo2_line_55": {
+      "type": "sl",
+      "from": "plan",
+      "to": "record",
+      "name": "",
+      "alt": true
+    },
+    "demo2_line_56": {
+      "type": "tb",
+      "from": "fire",
+      "to": "record",
+      "name": "",
+      "alt": true,
+      "M": 143.5
+    }
+  },
+  "areas": {
+
+  },
+  "initNum": 57
+}

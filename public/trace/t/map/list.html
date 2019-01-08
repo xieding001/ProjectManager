@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+</head>
+<body style="background: #FFF;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            </p>
+
+            <div class="clear"></div>
+        </div>
+        <div class="main" style="width: 100%;float: left;">
+            <div id="chart-map" style="height: 100%;width: 100%;"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var model;
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: "",
+                name: ""
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/project/list",
+                    rid: model.search.rid,
+                    name: model.search.name,
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+
+                    model.zlist = data.list;
+                    for (var i in model.zlist) {
+                        if (model.zlist[i].project_type == 1) {
+                            model.zlist[i].project_type = "新建";
+                        }
+                        if (model.zlist[i].project_type == 2) {
+                            model.zlist[i].project_type = "续建";
+                        }
+                        if (model.zlist[i].project_type == 3) {
+                            model.zlist[i].project_type = "新增";
+                        }
+                        if (model.zlist[i].process == 0) {
+                            model.zlist[i].process = "未开工";
+                        }
+                        if (model.zlist[i].process == 1) {
+                            model.zlist[i].process = "已开工";
+                        }
+                        if (model.zlist[i].process == 2) {
+                            model.zlist[i].process = "在建";
+                        }
+                        if (model.zlist[i].process == 3) {
+                            model.zlist[i].process = "部分投产";
+                        }
+                        if (model.zlist[i].process == 4) {
+                            model.zlist[i].process = "竣工投产";
+                        }
+                        if (model.zlist[i].product_important == 0) {
+                            model.zlist[i].product_important = "";
+                        }
+                        if (model.zlist[i].product_important == 1) {
+                            model.zlist[i].product_important = "动力电池";
+                        }
+                        if (model.zlist[i].product_important == 2) {
+                            model.zlist[i].product_important = "智能电网";
+                        }
+                        if (model.zlist[i].product_important == 3) {
+                            model.zlist[i].product_important = "汽车及零部件";
+                        }
+                        if (model.zlist[i].product_important == 4) {
+                            model.zlist[i].product_important = "农牧与饲料机械";
+                        }
+                        if (model.zlist[i].product_new == 0) {
+                            model.zlist[i].product_new = "";
+                        }
+                        if (model.zlist[i].product_new == 1) {
+                            model.zlist[i].product_new = "节能环保";
+                        }
+                        if (model.zlist[i].product_new == 2) {
+                            model.zlist[i].product_new = "新一代信息技术";
+                        }
+                        if (model.zlist[i].product_new == 3) {
+                            model.zlist[i].product_new = "生物医药";
+                        }
+                        if (model.zlist[i].product_new == 4) {
+                            model.zlist[i].product_new = "新能源";
+                        }
+                        if (model.zlist[i].product_new == 5) {
+                            model.zlist[i].product_new = "新能源汽车";
+                        }
+                        if (model.zlist[i].product_new == 6) {
+                            model.zlist[i].product_new = "高端装备制造";
+                        }
+                        if (model.zlist[i].product_new == 7) {
+                            model.zlist[i].product_new = "新材料";
+                        }
+                    }
+
+                });
+            },
+            doList: function (rid) {
+                model.page.count = 1;
+                model.search.rid = rid;
+                this.list(1);
+            },
+            doList2: function () {
+                model.page.count = 1;
+                this.list(1);
+            },
+            echarts: function () {
+
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+//        model.list(1);
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+    require(["echarts_c"], function (echarts) {
+        $.get('/trace/source/lymap.json', function (liyangJson) {
+            echarts.registerMap('liyang', liyangJson);
+            var dom = document.getElementById("chart-map");
+            var myChart = echarts.init(dom);
+            var option = {
+                series: [
+                    {
+                        name: '溧阳',
+                        zoom:1.2,
+                        type: 'map',
+                        roam:true,
+                        mapType: 'liyang',
+                        selectedMode: 'single',
+						aspectScale:1,
+                        label: {
+                            normal: {
+                                show: true
+                            },
+                            emphasis: {
+                                show: true
+                            },
+                        },
+						// 文本位置修正
+						textFixed: {
+							上黄: [20, -20],
+							竹箦: [20, -20]
+						},
+                        data: [
+                            {name: "上黄", rid: "2", label:{show:true,offset:[20,20]},itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "别桥", rid: "5", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "南渡", rid: "6", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "埭头", rid: "3", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "天目湖", rid: "4", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "戴埠", rid: "10", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "中关村", rid: "11", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "社渚", rid: "8", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "竹箦", rid: "9", label:{show:true,position:[-200, 200]},itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "溧城", rid: "1", itemStyle: {normal: {color: 'lightskyblue'}}},
+                            {name: "上兴", rid: "7", itemStyle: {normal: {color: 'lightskyblue'}}}
+                        ]
+                    },
+                ],
+
+            };
+
+            myChart.setOption(option, true);
+            myChart.on('click', function (params) {
+                params.data.rid = params.data.rid?params.data.rid:11;
+                model.redict("/trace/t/#project/list.html?rid="+params.data.rid);
+            });
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

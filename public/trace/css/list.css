@@ -1,0 +1,244 @@
+.main-contain{
+    width:99%;
+    /*padding-bottom: 40px;*/
+    /*min-height: 1295px;*/
+}
+.main-contain .top{
+    width: 100%;
+    background: #fff;
+    padding-bottom: 10px;
+}
+/*统一面包屑*/
+.main-contain .top .title{
+    width:98%;
+    height:40px;
+    line-height: 40px;
+    padding-left:2%;
+    border-bottom:1px solid #66cccc;
+    margin:0 auto;
+    font-weight: bold;
+}
+
+
+/*关键词选择*/
+.main-contain .top .list{
+    width: 100%;
+}
+.main-contain .top .list li{
+    width: 33.33%;
+    height: 30px;
+    float: left;
+    margin-top: 10px;
+}
+.main-contain .top .list .list_div{
+    margin: auto;
+    width: 250px;
+    height: 30px;
+}
+.list_div_span{
+    /*margin-top:-10px;*/
+    position: relative;
+    /*top:-10px;*/
+    line-height: 30px;
+    font-size: 14px;
+}
+.main-contain .top .list li span{
+    display: block;
+    float: left;
+    width: 80px;
+    line-height: 30px;
+    text-align: right;
+    padding-right:10px;
+}
+.main-contain .top .list li input{
+    float: left;
+    width: 170px;
+    height: 30px;
+    border:1px solid #ff6000;
+    border-radius: 5px;
+}
+.main-contain .top .list .arrow_wrapper{
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: #ff6000;
+    z-index: 1;
+}
+.main-contain .top .list .select-parent{
+    position: relative;
+    display: inline-block;
+    width: 170px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    border: solid 1px #ff6000;
+    border-radius: 5px;
+    color: #333;
+}
+.submit{
+    width: 100px;
+    height:30px;
+    background: #66cccc;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    margin: auto;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/*导航切换*/
+.main-contain .main{
+    width: 100%;
+    background: #fff;
+    /*margin-top: 10px;*/
+    padding:0 10px;
+    height: 680px;
+}
+.main-contain .main nav{
+    width: 100%;
+    height: 35px;
+    border-bottom:1px solid #ff6000;
+}
+.main-contain .main nav li{
+    width: 14.28%;
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*中间table*/
+.table{
+    width: 100%!important;
+    margin:15px auto;
+}
+.table thead{
+    background: #66CCCE;
+}
+.table thead tr th{
+    color: #fff!important;
+    text-align: center;
+    border-bottom: none!important;
+    padding: 5px 0 !important;
+
+}
+/*分页*/
+.paging{
+    width: 500px;
+    height: 80px;
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.paging input{
+    width: 75px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding-left: 0;
+}
+.paging .prev,.paging .next{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    margin:0 8px;
+    cursor: pointer;
+}
+.paging .next{
+    border: 0;
+    background: #66CCCE;
+}
+.paging .next i{
+    font-size: 28px;
+    color: #fff;
+    margin-left: 10px;
+}
+.pagination{
+    margin:0 auto!important;
+}
+.select-parent {
+    position: relative;
+    display: inline-block;
+    width: 170px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    border: solid 1px #ff6000;
+    border-radius: 5px;
+    color:#333;
+}
+.arrow_wrapper{
+    pointer-events: none;
+    position: absolute;
+    right:0;
+    top:0;
+    width:35px;
+    height:30px;
+    background: #ff6000;
+    z-index:1;
+}
+.arrow{
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    margin:auto;
+    height:0;
+    width:0;
+    border-top:9px solid #fff;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+}
+
+.active_bg{
+    background: #ff6000;
+    color: #fff;
+}
+
+/*表格相关*/
+.table tbody tr td{
+    height: 34px;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle!important;
+    border-bottom: 1px solid #ddd;
+    border-top: none;
+
+}
+.table tbody tr td span{
+    padding:7px 12px;
+    background: #66CCCE;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.table tbody tr .price{
+    line-height: 12px;
+}
+.table tbody tr .price .origin{
+    margin-top: 15px;
+    text-decoration: line-through;
+}
+.table tbody tr .price .now{
+    color: #ff6000;
+}
+.list_radio1{
+    height: 20px;
+    position: relative;
+    top: 8px;
+}
+.list_radio1_div{
+    float: left;
+    width: 50%;
+    height: 45px;
+    line-height: 45px;
+}

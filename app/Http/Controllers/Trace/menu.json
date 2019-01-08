@@ -1,0 +1,66 @@
+[
+  {
+    "name": "首页列表",
+    "url": "/trace/t/#map/list.html",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  },
+  {
+    "name": "重点项目",
+    "url": "/trace/t/#project/list.html",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  },
+  {
+    "name": "项目报送",
+    "url": "/trace/t/#trace/list.html",
+    "activity": 0,
+    "role": [
+      "admin",
+      "user"
+    ],
+    "son": []
+  },
+  {
+    "name": "项目分析",
+    "url": "/trace/t/#report/list.html",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  },
+  {
+    "name": "填报审核",
+    "url": "/trace/t/#check/list.html",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  },
+  {
+    "name": "用户列表",
+    "url": "/trace/t/#user/list.html",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  },
+  {
+    "name": "用户手册",
+    "url": "/trace/source/help.pdf",
+    "activity": 0,
+    "role": [
+      "admin"
+    ],
+    "son": []
+  }
+]

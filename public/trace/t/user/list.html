@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>直销商城 - 商城订单</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 7.69% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">用户列表</p>
+
+            <div class="list">
+                <div class="dw_filter dw_filter on" style="margin-bottom: 0;">
+                    <div class="el on">
+                        <span class="title">用户名：</span>
+
+                        <div class="getr">
+                            <input type="text" name="keyword" placeholder="请输入用户名" maxlength="200"
+                                   :duplex="search.username">
+                        </div>
+                        <div class="btnbox" style="margin-top: -28px;">
+                            <span class="p_but" :click="doList2()">搜索</span>
+                        </div>
+                        <div class="btnbox" style="margin-top: -38px;float: right;">
+                            <span class="p_but" :click="redict('/trace/t/#user/add.html')">新增</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- 展示部分 -->
+        <div class="main" style="margin-top: -16px;">
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>用户名称</th>
+                    <th>邮箱</th>
+                    <th>手机号</th>
+                    <th>状态</th>
+                    <th>超级管理员</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ms-for="el in zlist">
+                    <td>{{ el.uid }}</td>
+                    <td>{{ el.username }}</td>
+                    <td>{{ el.email }}</td>
+                    <td>{{ el.mobile }}</td>
+                    <td>
+                        <div :if="el.status == 1">开启</div>
+                        <div :if="el.status == 0">关闭</div>
+                    </td>
+                    <td>
+                        <div :if="el.role == 'admin'">是</div>
+                        <div :if="el.role != 'admin'">否</div>
+                    </td>
+                    <td>
+                        <span :if="el.role != 'admin'" class="look"
+                              :click="redict('/trace/t/#user/add.html?uid='+el.uid)">编辑</span>
+                        <span :if="el.role == 'admin'" class="look" style="background: #ddd;">编辑</span>
+                    </td>
+                </tr>
+                <tr :visible="page.doing">
+                    <td colspan='7'>
+                        <img src="/img/loading.gif" alt="" width="40" height="40">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 分页组件 -->
+            <div style="width: 100%;text-align: center;">
+                <ul class="pagination fr" :visible="page.count > page.size">
+                    <li class="disabled">
+                        <span>总记录数：{{ page.count }}</span>
+                    </li>
+                    <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                    <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                    <!--ms-for: el in page.nums-->
+                    <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <!--ms-for-end:-->
+                    <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                    <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                </ul>
+                <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            search: {
+                username: ""
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/user/list",
+                    username: model.search.username,
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+                    model.zlist = data.list;
+                });
+            },
+            doList2: function () {
+                model.page.count = 1;
+                this.list(1);
+            },
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+        model.list(1);
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+</script>
+</body>
+
+</html>

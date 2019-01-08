@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登录</title>
+	<link rel="stylesheet" href="/trace/t/login/css/common.css">
+	<link rel="stylesheet" href="/trace/t/login/css/login.css">
+	<script src="/js/lib/requirejs/require.js"></script>
+	<script src="/js/lib/requirejs/main.js"></script>
+	<style>
+		.activeNav{
+			color: #2e94fd!important;
+			border-bottom: 2px solid #2e94fd;
+		}
+		.mainCenter img{
+			width: auto!important;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<div class="left">
+			<img src="/trace/t/login/images/logo.png" alt="">
+		</div>
+		<div class="right">
+			<ul>
+			</ul>
+		</div>
+	</nav>
+	<!-- 主要区域 -->
+	<div class="main">
+		<div class="mainCenter">
+			<form action="" id="login_form">
+				<div class="loginForm">
+					<p class="title">账户登录</p>
+					<div class="contentInput">
+						<img src="/trace/t/login/images/login/account.png" alt="">
+						<input type="text" placeholder="请输入您的账号" name="userName">
+					</div>
+					<div class="contentInput">
+						<img src="/trace/t/login/images/login/pwd.png" alt="">
+						<input type="password" placeholder="请输入您的密码" name="pwd">
+					</div>
+					<div class="btn" id="btn_login">
+						登录
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		require(["baseUiIndex.css"]);
+		require(["jquery.utils"],function () {
+            $(function () {
+                var loginUrl = getRequest().loginUrl || "/trace/t/#map/list.html";
+				if(loginUrl.indexOf("user")){
+					loginUrl = "/trace/t/#map/list.html";
+				}
+
+                $("#btn_login").click(function(){
+                    var mobile = $("input[name='userName']").val();
+                    var password = $("input[name='pwd']").val();
+                    var pattern = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+                    /*if(mobile == "" || mobile.length!=11 || pattern.test(mobile) == false){
+                        alert("请填写正确账户!");
+                        return false;
+                    }else*/
+					if(password == "" || (/^\s+$/gi.test(password))){
+                        alert("密码不可为空哦!");
+                        return false;
+                    }else{
+                        $.ajaxGet({
+                            url :"/trace/login",
+                            username: mobile,
+                            pwd:password,
+                        },function (data) {
+                        	window.sessionStorage.setItem('uid',data.uid);
+							window.location.href = loginUrl;
+                        });
+                    }
+
+                })
+            })
+        });
+	</script>
+</body>
+</html>

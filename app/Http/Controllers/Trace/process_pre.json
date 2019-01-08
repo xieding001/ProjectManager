@@ -1,0 +1,284 @@
+{
+  "title": "业务审批流程",
+  "nodes": {
+    "name": {
+      "name": "名称核准",
+      "left": 386,
+      "top": 24,
+      "type": "fork",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "map_record": {
+      "name": "施工图消防设计备案",
+      "left": 365,
+      "top": 578,
+      "type": "fork",
+      "width": 136,
+      "height": 38,
+      "alt": true
+    },
+    "project_register": {
+      "name": "项目备案",
+      "left": 386,
+      "top": 129,
+      "type": "fork",
+      "width": 100,
+      "height": 24,
+      "alt": true
+    },
+    "business_license": {
+      "name": "营业执照",
+      "left": 386,
+      "top": 80,
+      "type": "fork",
+      "width": 100,
+      "height": 24,
+      "alt": true
+    },
+    "people_record": {
+      "name": "人防备案（非生产建筑）",
+      "left": 153,
+      "top": 365,
+      "type": "fork",
+      "width": 158,
+      "height": 27,
+      "alt": true
+    },
+    "use_permit": {
+      "name": "土地使用证",
+      "left": 387,
+      "top": 246,
+      "type": "fork",
+      "width": 100,
+      "height": 24,
+      "alt": true
+    },
+    "map_construct": {
+      "name": "总平图、施工图审查",
+      "left": 385,
+      "top": 293,
+      "type": "fork",
+      "width": 100,
+      "height": 38,
+      "alt": true
+    },
+    "quality": {
+      "name": "质检、安检申报",
+      "left": 369,
+      "top": 474,
+      "type": "fork",
+      "width": 128,
+      "height": 30,
+      "alt": true
+    },
+    "land_index": {
+      "name": "土地指标报批",
+      "left": 538,
+      "top": 80,
+      "type": "fork",
+      "width": 106,
+      "height": 27,
+      "alt": true
+    },
+    "construct_permit": {
+      "name": "建筑工程施工许可证",
+      "left": 365,
+      "top": 531,
+      "type": "fork",
+      "width": 140,
+      "height": 27,
+      "alt": true
+    },
+    "sell_contract": {
+      "name": "签订出让合同",
+      "left": 537,
+      "top": 248,
+      "type": "fork",
+      "width": 110,
+      "height": 30,
+      "alt": true
+    },
+    "plan_permit": {
+      "name": "建设工程规划许可证",
+      "left": 363,
+      "top": 366,
+      "type": "fork",
+      "width": 146,
+      "height": 27,
+      "alt": true
+    },
+    "environment": {
+      "name": "环保审批",
+      "left": 114,
+      "top": 182,
+      "type": "fork",
+      "width": 100,
+      "height": 24,
+      "alt": true
+    },
+    "safety": {
+      "name": "安全三同时",
+      "left": 249,
+      "top": 182,
+      "type": "fork",
+      "width": 100,
+      "height": 24,
+      "alt": true
+    },
+    "energy": {
+      "name": "项目节能评估审核",
+      "left": 371,
+      "top": 183,
+      "type": "fork",
+      "width": 134,
+      "height": 27,
+      "alt": true
+    },
+    "construction_condition": {
+      "name": "规划建设条件",
+      "left": 540,
+      "top": 129,
+      "type": "fork",
+      "width": 104,
+      "height": 28,
+      "alt": true
+    },
+    "bid_land": {
+      "name": "土地招拍挂",
+      "left": 540,
+      "top": 180,
+      "type": "",
+      "width": 100,
+      "height": 27,
+      "alt": true
+    },
+    "contract_record": {
+      "name": "合同备案（直接发包）",
+      "left": 355,
+      "top": 422,
+      "type": "task",
+      "width": 166,
+      "height": 27,
+      "alt": true
+    }
+  },
+  "lines": {
+    "demo2_line_48": {
+      "type": "sl",
+      "from": "name",
+      "to": "business_license",
+      "name": ""
+    },
+    "demo2_line_49": {
+      "type": "sl",
+      "from": "business_license",
+      "to": "project_register",
+      "name": ""
+    },
+    "demo2_line_50": {
+      "type": "tb",
+      "M": 167.5,
+      "from": "project_register",
+      "to": "environment",
+      "name": ""
+    },
+    "demo2_line_51": {
+      "type": "tb",
+      "M": 167.5,
+      "from": "project_register",
+      "to": "safety",
+      "name": ""
+    },
+    "demo2_line_53": {
+      "type": "sl",
+      "from": "project_register",
+      "to": "energy",
+      "name": ""
+    },
+    "demo2_line_54": {
+      "type": "sl",
+      "from": "energy",
+      "to": "use_permit",
+      "name": ""
+    },
+    "demo2_line_56": {
+      "type": "sl",
+      "from": "use_permit",
+      "to": "map_construct",
+      "name": ""
+    },
+    "demo2_line_66": {
+      "type": "sl",
+      "from": "quality",
+      "to": "construct_permit",
+      "name": ""
+    },
+    "demo2_line_67": {
+      "type": "sl",
+      "from": "construct_permit",
+      "to": "map_record",
+      "name": ""
+    },
+    "demo2_line_68": {
+      "type": "sl",
+      "from": "land_index",
+      "to": "construction_condition",
+      "name": ""
+    },
+    "demo2_line_69": {
+      "type": "sl",
+      "from": "construction_condition",
+      "to": "bid_land",
+      "name": ""
+    },
+    "demo2_line_70": {
+      "type": "sl",
+      "from": "bid_land",
+      "to": "sell_contract",
+      "name": ""
+    },
+    "demo2_line_71": {
+      "type": "sl",
+      "from": "sell_contract",
+      "to": "use_permit",
+      "name": ""
+    },
+    "demo2_line_72": {
+      "type": "sl",
+      "from": "map_construct",
+      "to": "plan_permit",
+      "name": ""
+    },
+    "demo2_line_73": {
+      "type": "sl",
+      "from": "plan_permit",
+      "to": "people_record",
+      "name": ""
+    },
+    "demo2_line_74": {
+      "type": "tb",
+      "M": 547,
+      "from": "people_record",
+      "to": "construct_permit",
+      "name": ""
+    },
+    "demo2_line_76": {
+      "type": "sl",
+      "from": "plan_permit",
+      "to": "contract_record",
+      "name": ""
+    },
+    "demo2_line_77": {
+      "type": "sl",
+      "from": "contract_record",
+      "to": "quality",
+      "name": ""
+    }
+  },
+  "areas": {
+
+  },
+  "initNum": 78
+}

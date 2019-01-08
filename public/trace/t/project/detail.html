@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>重点工业项目</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/detail_new.css">
+    <link rel="stylesheet" href="/css/release.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 25% !important;
+        }
+
+        .order_ul {
+            margin: auto;
+            display: block !important;
+        }
+
+        .GooFlow_head, .GooFlow_tool {
+            display: none;
+        }
+
+        .ico {
+            display: none;
+        }
+
+        .GooFlow_item table {
+            height: 25px !important;
+        }
+        .btn-edit {
+            height: 30px;
+            line-height: 30px;
+            color: #66cccc;
+            float: left;
+            text-align: center;
+            margin: 0 1%;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-edit:hover{
+            color: #5ebbbb;
+        }
+        .order_main .item-box>.order_ul{
+            width:75%;
+        }
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">重点工业项目 > 详情&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                （前期进度完成前，验收进度不可操作）
+            </p>
+
+            <div class="clear"></div>
+        </div>
+        <div class="nav_out">
+            <div class="nav_out_1">
+                <nav :if="canClick != 0">
+                    <li ms-attr="{class:show_type==1?'active_bg':''}" :click="show_type=1">基本信息</li>
+                    <li ms-attr="{class:show_type==2?'active_bg':''}" :click="echarts()">总进度</li>
+                    <li ms-attr="{class:show_type==3?'active_bg':''}" :click="flow(3)">前期进度</li>
+                    <li ms-attr="{class:show_type==4?'active_bg':''}" :click="time()">施工进度</li>
+                    <!--<li ms-attr="{class:show_type==5?'active_bg':''}" :click="flow(5)">验收进度</li>-->
+                </nav>
+                <nav :if="canClick == 0">
+                    <li ms-attr="{class:show_type==1?'active_bg':''}" :click="show_type=1">基本信息</li>
+                    <li ms-attr="{class:show_type==2?'active_bg':''}" :click="echarts()">总进度</li>
+                    <li ms-attr="{class:show_type==3?'active_bg':''}" :click="flow(3)">前期进度</li>
+                    <li ms-attr="{class:show_type==4?'active_bg':''}" :click="time()">施工进度</li>
+                    <!--<li ms-attr="{class:show_type==5?'active_bg':''}" :click="cannot()">验收进度</li>-->    
+                </nav>
+            </div>
+
+        </div>
+        <!-- 展示部分 -->
+        <div class="main">
+            <div class="order_main" :visible="show_type==1">
+                <div class="item_box">
+                    <ul class="order_ul">
+
+                        <li>
+                            <p>企业名称：</p>
+
+                            <p>{{ detail.company }}</p>
+                        </li>
+                        <li>
+                            <p>项目名称：</p>
+
+                            <p>{{ detail.name }}</p>
+                        </li>
+                        <li>
+                            <p>企业联系人：</p>
+
+                            <p>{{ detail.company_user }}</p>
+                        </li>
+                        <li>
+                            <p>企业联系方式：</p>
+
+                            <p>{{ detail.company_contact }}</p>
+                        </li>
+                        <li>
+                            <p>企业类型：</p>
+
+                            <p :if="detail.important_type == 1">省重点</p>
+
+                            <p :if="detail.important_type == 2">常州市重点</p>
+
+                            <p :if="detail.important_type == 3">溧阳市重点</p>
+
+                        </li>
+                        <li>
+                            <p>属性：</p>
+
+                            <p :if="detail.project_type == 1">新建</p>
+                            <p :if="detail.project_type == 2">续建</p>
+                            <p :if="detail.project_type == 0">""</p>
+                        </li>
+                        <li>
+                            <p>镇区：</p>
+
+                            <p>{{ detail.region }}</p>
+                        </li>
+                        <li>
+                            <p>计划总投资：</p>
+
+                            <p>{{ detail.invest_all }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>计划设备总投资：</p>
+
+                            <p>{{ detail.invest_device }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>已完成总投资：</p>
+
+                            <p>{{ detail.invest_all_used }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>已完成设备总投资：</p>
+
+                            <p>{{ detail.invest_device_used }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>截止上年度底完成投资：</p>
+
+                            <p>{{ detail.invest_pre }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>截止上年度底完成设备总投资：</p>
+
+                            <p>{{ detail.invest_device_pre }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>本年度计划总投资：</p>
+
+                            <p>{{ detail.invest_now }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>本年度计划设备总投资：</p>
+
+                            <p>{{ detail.invest_device_now }}（万元）</p>
+                        </li>
+
+                        <li>
+                            <p>进口设备投资：</p>
+
+                            <p>{{ detail.invest_device_import }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>智能化设备投资：</p>
+
+                            <p>{{ detail.invest_device_smart }}（万元）</p>
+                        </li>
+                        <li>
+                            <p>用地性质：</p>
+
+                            <p :if="detail.area_type == 1">新增用地</p>
+
+                            <p :if="detail.area_type == 2">收购盘活</p>
+
+                            <p :if="detail.area_type == 3">租用</p>
+
+                            <p :if="detail.area_type == 4">不需用地</p>
+                        </li>
+                        <li>
+                            <p>新兴产业：</p>
+
+                            <p :if="detail.product_new == 1">节能环保</p>
+
+                            <p :if="detail.product_new == 2">新一代信息技术</p>
+
+                            <p :if="detail.product_new == 3">生物医药</p>
+
+                            <p :if="detail.product_new == 4">新能源</p>
+
+                            <p :if="detail.product_new == 5">新能源汽车</p>
+
+                            <p :if="detail.product_new == 6">高端装备制造</p>
+
+                            <p :if="detail.product_new == 7">新材料</p>
+                        </li>
+                        <li>
+                            <p>四大重点发展产业：</p>
+
+                            <p :if="detail.product_important == 1">动力电池</p>
+
+                            <p :if="detail.product_important == 2">智能电网</p>
+
+                            <p :if="detail.product_important == 3">汽车及零部件</p>
+
+                            <p :if="detail.product_important == 4">农牧与饲料机械</p>
+                        </li>
+                        <li>
+                            <p>总规划用地面积：</p>
+
+                            <p>{{ detail.area_all }}</p>
+                        </li>
+                        <li>
+                            <p>规划新建/租用建筑面积：</p>
+
+                            <p>{{ detail.area_work }}</p>
+                        </li>
+                        <!--<li>
+                            <p>厂房面积（平方米）：</p>
+
+                            <p>{{ detail.area_plant }}</p>
+                        </li>-->
+                        <!--<li>
+                            <p>已建厂房面积（平方米）：</p>
+
+                            <p>{{ detail.area_plant_build }}</p>
+                        </li>-->
+
+
+                        <li>
+                            <p>开工日期：</p>
+
+                            <p>{{ detail.date_begin }}</p>
+                        </li>
+                        <li>
+                            <p>投产日期：</p>
+
+                            <p>{{ detail.date_invest }}</p>
+                        </li>
+                        <li>
+                            <p>项目达产产能：</p>
+
+                            <p>{{ detail.guess_capacity}}</p>
+                        </li>
+                        <li>
+                            <p>预计实现年销售：</p>
+
+                            <p>{{ detail.guess_sale }}</p>
+                        </li>
+
+                        <li>
+                            <p>预计年利税：</p>
+
+                            <p>{{ detail.tax}}（万元）</p>
+                        </li>
+                        <li>
+                            <p>利润：</p>
+
+                            <p>{{ detail.profit}}（万元）</p>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="order_main" :visible="show_type==2">
+                <div class="item_box" style="width: 50%;height: 500px;">
+                    <div id="container1" style="height: 500px;width: 90%;margin: auto;"></div>
+                </div>
+                <div class="item_box" style="width: 50%;height: 500px;">
+                    <div id="container2" style="height: 500px;width: 90%;margin: auto;"></div>
+                </div>
+
+
+            </div>
+
+            <div class="order_main" :if="show_type==3">
+                <div style="width: 10%;float: left;padding-top: 80px;padding-left: 8px;">
+                    <li style="float: left;width: 100%;">
+                        <p style="width: 20px;height: 12px;background: #DBDBDB;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">不可操作</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #CDCD00;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">待填报</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #436EEE;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">填报完成</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #ff6000;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">审核中/未结束</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #00CD00;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">审核通过</p>
+                    </li>
+
+                </div>
+                <div class="item_box" style="width: 90%;">
+                    <div id="demo3" style="margin:auto;border: 1px solid #ddd;"></div>
+                </div>
+            </div>
+
+            <div class="order_main" :visible="show_type==4">
+                <div class="item_box" :visible="trace.length>0">
+                    <div class="order_title">内容：</div>
+                    <ul class="order_ul" style="float: left;"><p></p>
+                        <!--<li><p>标题：</p><p>积生活</p></li>-->
+                        <li>
+                            <p>时间：</p>
+
+                            <p>{{ trace_show.date }}</p>
+                        </li>
+                        <li>
+                            <p>状态：</p>
+
+                            <p :if="trace_show.status == 0">未审核</p>
+
+                            <p :if="trace_show.status == 1">审核通过</p>
+
+                            <p :if="trace_show.status == -1">审核失败</p>
+                        </li>
+                        <li>
+                            <p>项目进度：</p>
+
+                            <p :if="trace_show.type == 0">未开工</p>
+
+                            <p :if="trace_show.type == 1">已开工</p>
+
+                            <p :if="trace_show.type == 2">在建</p>
+
+                            <p :if="trace_show.type == 3">部分投产</p>
+
+                            <p :if="trace_show.type == 4">竣工投产</p>
+                        </li>
+                        <li>
+                            <p>已完成总投资：</p>
+
+                            <p>{{ trace_show.invest_all_used }}</p>
+                        </li>
+                        <li>
+                            <p>已完成设备投资：</p>
+
+                            <p>{{ trace_show.invest_device_used }}</p>
+                        </li>
+                        <li>
+                            <p style="float: left;">描述：</p>
+
+                            <p>
+                                <textarea
+                                        style="width: 600px;height: 100px;padding: 10px;margin-bottom: -5px;border: 1px solid #ddd;"
+                                        readonly :duplex="trace_show.desc"></textarea>
+                            </p>
+                        </li>
+                    </ul>
+
+                    <div :if="trace_show.flow ==1 && uid==1"  class="btn-edit"  :click="redict('/trace/t/#project/process_edit.html?traceId='+trace_show.id)">
+                        编辑
+                    </div>
+                </div>
+                <div class="item_box" style="height: 200px;" :visible="trace.length>0">
+                    <div class="order_title">图片：</div>
+                    <ul class="order_img order_ul order_ul2">
+                        <li :for="el in trace_show.img" :if="trace_show.img != null">
+                            <a target="_blank" ms-attr="{href:el}"><img ms-attr="{src:el}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="item_box" style="height: 50px;">
+                    <div style="width: 150px;" class="next2" :click="redict('/trace/t/#project/process.html?pid='+pid)">
+                        新增
+                    </div>
+                </div>
+                <div class="flowChart" :visible="trace.length>0"></div>
+            </div>
+
+            <div class="order_main" :if="show_type==5">
+                <div style="width: 10%;float: left;padding-top: 80px;padding-left: 8px;">
+                    <li style="float: left;width: 100%;">
+                        <p style="width: 20px;height: 12px;background: #DBDBDB;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">不可操作</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #CDCD00;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">待填报</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #ff6000;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">审核中/未结束</p>
+                    </li>
+                    <li style="float: left;width: 100%;margin-top: 10px;">
+                        <p style="width: 20px;height: 12px;background: #436EEE;float: left;margin: 0;"></p>
+
+                        <p style="float: left;line-height: 12px;margin: 0 0 0 8px;">填报完成</p>
+                    </li>
+
+                </div>
+                <div class="item_box" style="width: 90%;">
+                    <div id="demo5" style="margin:auto;border: 1px solid #ddd;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var mode;
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            $uid: "",
+            show_type: 1,
+            detail: {
+                "rid": "",
+                "name": "",
+                "desc": "",
+                "company": "",
+                "invest_all": "",
+                "invest_pre": "",
+                "invest_now": "",
+                "invest_device_now": "",
+                "invest_device": "",
+                "invest_device_smart": "",
+                "invest_device_import": "",
+                "invest_device_pre": "",
+                "product_important": 0,
+                "product_new": 0,
+                "area_type": "",
+                "project_type": "",
+                "area_all": "",
+                "area_plant": 0,
+                "area_plant_build": "",
+                "area_work": "",
+                "date_begin": "",
+                "date_invest": "",
+                "guess_sale": "",
+                "guess_capacity": "",
+                "tax": "",
+                "profit": ""
+            },
+            process_pre: {},
+            process_check: {},
+            trace: {},
+            trace_show: {
+                date: "",
+                desc: "",
+                invest_all_used: "",
+                invest_device_used: "",
+                type: "",
+                img: []
+            },
+            pid: "",
+            canClick: "",
+            doDetail: function () {
+                $.ajaxGet({
+                    url: "/trace/project/detail",
+                    pid: model.pid
+                }, function (data) {
+                    model.detail = data.detail;
+                    model.process_pre = data.process_pre;
+                    model.process_check = data.process_check;
+                    model.trace = data.trace;
+                    model.canClick = data.canClick;
+                    if (model.trace.length > 0) {
+                        model.trace_show = model.trace[0];
+                    }
+                    model.show();
+                });
+            },
+            echarts: function () {
+                model.show_type = 2;
+                require(['echarts_b'], function (echarts) {
+                    var column1 = ["已完成总投资", "尚未完成总投资"];
+                    var data1 = [
+                        {
+                            "value": model.detail.invest_all_used,
+                            "name": "已完成总投资"
+                        },
+                        {
+                            "value": (model.detail.invest_all - model.detail.invest_all_used),
+                            "name": "尚未完成总投资"
+                        }
+                    ];
+                    var column2 = ["已完成设备总投资", "尚未完成设备总投资"];
+                    var data2 = [{"name": "已完成设备总投资", "value": model.detail.invest_device_used}, {
+                        "name": "尚未完成设备总投资",
+                        "value": (model.detail.invest_device - model.detail.invest_device_used)
+                    }];
+                    drawRound('container1', '', '', column1, data1, ['#79c6c2', 'red']);
+                    drawRound('container2', '', '', column2, data2, ['green', 'yellow']);
+
+                    function drawRound(obj, cont, title, data, datas, color) {
+                        this.landChart = echarts.init(document.getElementById(obj));
+                        this.landChart.setOption({
+                            title: {
+                                text: cont,
+                                x: 'center'
+                            },
+                            color: color,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                right: 10,
+                                data: data,
+                                top: 100,
+                            },
+                            series: [
+                                {
+                                    name: title,
+                                    type: 'pie',
+                                    radius: '55%',
+                                    center: ['40%', '60%'],
+                                    data: datas,
+                                    itemStyle: {
+                                        emphasis: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        },
+                                    }
+                                }
+                            ]
+                        });
+                        this.landChart.resize();
+                    }
+                });
+            },
+            flow: function (id) {
+                model.show_type = id;
+                require(['flow'], function () {
+                    var jsondata;
+                    if (id == 3) {
+                        jsondata = model.process_pre;
+                    } else {
+                        jsondata = model.process_check;
+                    }
+                    var property = {
+                        headLabel: true,
+                        width: 900,
+                        height: 700,
+                        toolBtns: [],
+                        haveHead: false,
+                        headBtns: [],//如果haveHead=true，则定义HEAD区的按钮
+                        haveTool: false,
+                        haveGroup: false,
+                        useOperStack: false
+                    };
+                    var demo = $.createGooFlow($("#demo" + id), property);
+                    demo.loadData(jsondata);
+                });
+            },
+            time: function () {
+                model.show_type = 4;
+                $(".flowChart").empty();
+                require(['timeLine'], function () {
+                    var jsonArr = model.trace;
+                    timeAxis(jsonArr);
+                });
+            },
+            show: function () {
+                if (model.show_type == 2) {
+                    model.echarts();
+                } else if (model.show_type == 3) {
+                    model.flow(3)
+                } else if (model.show_type == 4) {
+                    model.time();
+                } else if (model.show_type == 5) {
+                    model.flow(5);
+                }
+            },
+            redict: function (url) {
+                redict_iframe(url)
+            },
+            cannot: function () {
+                alert("请先完成前期进度");
+            }
+        });
+        model.uid = window.sessionStorage.getItem('uid');
+        model.pid = getRequest().pid;
+        model.show_type = getRequest().show ? getRequest().show : 1;
+        model.doDetail();
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+    function showTrace(o, i) {
+        model.trace_show = model.trace[i];
+        $(o).css("background", "#1ac8b5");
+        $(o).css("border-color", "#1ac8b5");
+        $(o).parent().siblings().find(".check").css("background", "#ccc").css("border-color", "#ccc");
+    }
+</script>
+</body>
+
+</html>
