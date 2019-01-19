@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>设备投入</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span {
+            height: auto !important;
+        }
+
+        .ms-controller {
+            visibility: hidden;
+        }
+
+        .must {
+            color: red;
+            font-size: 20px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
+
+        nav li {
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title">修改设备投入</div>
+        <div class="form" style="margin-top: 20px;">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">月份</p>
+
+                <div class="row_right" >
+                    <input style="color: #71686885;" readonly type="text" placeholder="" :duplex="detail.date">
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">投入金额（必填）</p>
+
+                <div class="row_right">
+                    <input type="number" placeholder="单位（万元）" :duplex="detail.invested">
+                </div>
+            </div>
+
+            <div class="form_double_row">
+                <div style="clear: both;"></div>
+
+                <p class="row_left">发票照片（必填）</p>
+
+                <div class="row_right" style="margin-top: 5px;">
+                    <div id="fileUploadContent" class="fileUploadContent">
+                        <div class="uploadBts">
+                            <div style="width: 100px;height: 100px;" :for="(index,el) in img">
+                                <img :attr="{src:el.img_url}" width="100" height="100" alt="">
+
+                                <div class="remove_img" :click="removeImg(index)">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </div>
+                            </div>
+                            <div class="chooseImg selectFileBt">
+                                <img src="/img/icon/icon_add.png" alt="">
+                                <span style="font-size: 12px;">点击添加图片</span>
+                            </div>
+
+                        </div>
+                        <div class="box"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_tips">
+                <div style="clear: both;"></div>
+                <p class="row_left"></p>
+
+                <div class="row_right" style="margin-top: 20px;font-size: 12px;">支持jpg、gif、png图片格式</div>
+            </div>
+            <br/>
+
+            <div class="form_row" style="margin-top: 50px;" >
+                <div class="next2" :visible="auth.uid==auth.uid_return" :click="submit()">完成</div>
+            </div>
+            <div class="form_row">
+                <div class="next2" style="background:#dddddd;" :click="goBack()">返回</div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css", "font-awesome.css"]);
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            $uid: "",
+            detail: {
+                "trace_id":"",
+                "invested": "",
+                "date": "",
+                "pid": "",
+                "img" :[]
+            },
+            auth:{
+                uid:"",
+                uid_return:""
+            },
+            "img": [],
+            getFacilityDetail:function () {
+                $.ajaxGet({
+                    url: "/trace/facility/get",
+                    trace_id: model.detail.trace_id
+                }, function (data) {
+                    model.detail.invested = data.res.invested;
+                    model.detail.date=data.res.date;
+                    model.detail.pid=data.res.pid;
+                    model.auth.uid_return=data.res.uid;
+                    if(model.detail.img){
+                        for(var i in data.res.img){
+                            model.img.push({
+                                img_url:data.res.img[i]
+                            })
+                        }
+                    }
+
+                });
+            },
+            submit: function () {
+                var detail = model.detail;
+                for (var i in model.img){
+                    detail.img.push(model.img[i].img_url);
+                }
+                var url = "/trace/facility/edit";
+                detail.url = url;
+                $.ajaxPost(detail, function (data) {
+                    alert("操作成功");
+                    redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+                });
+            },
+            goBack: function(){
+                redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+            },
+            removeImg: function (index) {
+                if (!confirm("确认删除码")) return;
+
+                for (var i in model.img) {
+                    if (i == index) {
+                        model.img.splice(index, 1);
+                    }
+                }
+            },
+            getDate: function () {
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                return currentdate;
+            }
+        });
+        model.uid = window.sessionStorage.getItem('uid');
+        model.auth.uid = model.uid;
+        model.detail.trace_id = getRequest().traceId;
+        model.getFacilityDetail();
+    });
+
+    //图片上传部分
+    require(["jquery.fileUpload"], function () {
+        $(function () {
+            $("#fileUploadContent").initUpload({
+                "uploadUrl": "/trace/system/img/upload",//上传文件信息地址
+                //"size":350,//文件大小限制，单位kb,默认不限制
+                "maxFileNumber": 5,//文件个数限制，为整数
+                "filelSavePath": "",//文件上传地址，后台设置的根目录
+                "beforeUpload": beforeUploadFun,//在上传前执行的函数
+                "onUpload": onUploadFun,//在上传后执行的函数
+                "autoCommit": true,//文件是否自动上传
+                "fileType": ['png', 'jpg', 'docx', 'doc','JPG','PNG']//文件类型限制，默认不限制，注意写的是文件后缀
+            });
+        });
+        $(function () {
+            $('#aside').height($(window).height());
+        })
+    });
+    function beforeUploadFun() {
+    }
+    function onUploadFun(opt, data) {
+        uploadTools.uploadError(opt);//显示上传错误
+        uploadTools.uploadSuccess(opt);//显示上传成功
+    }
+
+</script>
+</body>
+
+</html>

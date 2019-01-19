@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title></title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        nav li {
+            width: 7.69% !important;
+            font-weight: 400 !important;
+        }
+
+        .active_bg {
+            background: none !important;
+            color: #ff6000 !important;
+        }
+
+        .red td {
+            color: red;
+        }
+
+        .red td div {
+            color: red;
+        }
+
+        .vf {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 120px;
+        }
+
+        tr th {
+            /*line-height: 40px !important;*/
+        }
+
+        .th2 {
+            width: 70px;
+            line-height: 20px !important;;
+        }
+
+    </style>
+</head>
+<body style="display: none;background: #f2f2f2;height: 860px;overflow: hidden;" ms-controller="root"
+      class="ms-controller">
+<!-- 主要内容 -->
+<div class="order_mall pr3">
+    <div class="main-contain">
+        <!-- 顶部搜索部分 -->
+        <div class="top">
+            <p class="title">设备投入上报&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                （红色列表为此月未填报）
+            </p>
+
+
+            <div class="clear"></div>
+        </div>
+
+
+            <!-- 表格部分 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>企业名称</th>
+                    <th>项目名称</th>
+                    <th>设备投入(万元)</th>
+                    <th>月份</th>
+                    <th>填报时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--ms-for: (i,el) in zlist-->
+                <tr ms-attr="{class:el.is_trace>0?'':'red'}">
+                    <td>{{ i+1+(page.no-1)*10 }}</td>
+                    <td style="text-align:left">{{ el.company }}</td>
+                    <td style="text-align:left">{{ el.name }}</td>
+                    <td>{{ el.invested }}</td>
+                    <td>{{ el.date }}</td>
+                    <td>{{ el.create_time }}</td>
+                    <td>
+                        <span class="look" :click="redict('/trace/t/#project/facility_edit.html?traceId='+el.id)">编辑</span>
+                    </td>
+                </tr>
+                <!--ms-for-end:-->
+                <tr :visible="page.doing">
+                    <td colspan='16'>
+                        <img src="/img/loading.gif" alt="" width="40" height="40">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 分页组件 -->
+            <div style="width: 100%;text-align: center;">
+                <ul class="pagination fr" :visible="page.count > page.size">
+                    <li class="disabled">
+                        <span>总记录数：{{ page.count }}</span>
+                    </li>
+                    <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                    <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                    <!--ms-for: el in page.nums-->
+                    <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                    <!--ms-for-end:-->
+                    <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                    <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                </ul>
+                <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['avalon'], function (avalon) {
+        var model = avalon.define({
+            $id: "root",
+            zlist: [],
+            search: {
+                rid: "",
+                name: ""
+            },
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = pageNo;
+                $.ajaxGet({
+                    url: "/trace/facility/list",
+                    pageSize: model.page.size,
+                    pageNo: model.page.no
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+                    model.zlist = data.list;
+                });
+            },
+            doList: function (rid) {
+                model.page.count = 1;
+                model.search.rid = rid;
+                window.sessionStorage.setItem('rid',rid);
+                this.list(1);
+            },
+            doList2: function () {
+                model.page.count = 1;
+                this.list(1);
+            },
+
+            redict: function (url) {
+                redict_iframe(url);
+            }
+        });
+
+        if(window.sessionStorage.getItem('name')){
+            model.search.name = window.sessionStorage.getItem('name');
+        }
+        if(window.sessionStorage.getItem('pageNo')){
+            model.list(window.sessionStorage.getItem('pageNo'));
+
+        }else{
+            model.list(1);
+        }
+
+    });
+    require(["baseUiIndex.css", "bootstrap"]);
+</script>
+</body>
+
+</html>
