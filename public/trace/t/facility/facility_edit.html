@@ -40,8 +40,21 @@
         <div class="form" style="margin-top: 20px;">
             <div class="form_row">
                 <div style="clear: both;"></div>
+                <p class="row_left">公司名称</p>
+                <div class="row_right" >
+                    <p>{{detail.company}}</p>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">项目名称</p>
+                <div class="row_right" >
+                    <p>{{detail.name}}</p>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
                 <p class="row_left">月份</p>
-
                 <div class="row_right" >
                     <input style="color: #71686885;" readonly type="text" placeholder="" :duplex="detail.date">
                 </div>
@@ -49,7 +62,6 @@
             <div class="form_row">
                 <div style="clear: both;"></div>
                 <p class="row_left">投入金额（必填）</p>
-
                 <div class="row_right">
                     <input type="number" placeholder="单位（万元）" :duplex="detail.invested">
                 </div>
@@ -63,7 +75,7 @@
                 <div class="row_right" style="margin-top: 5px;">
                     <div id="fileUploadContent" class="fileUploadContent">
                         <div class="uploadBts">
-                            <div style="width: 100px;height: 100px;" :for="(index,el) in img">
+                            <div style="width: 100px;height: 120px;" :for="(index,el) in img">
                                 <img :attr="{src:el.img_url}" width="100" height="100" alt="">
 
                                 <div class="remove_img" :click="removeImg(index)">
@@ -80,13 +92,20 @@
                     </div>
                 </div>
             </div>
+
             <div class="form_tips">
                 <div style="clear: both;"></div>
                 <p class="row_left"></p>
-
                 <div class="row_right" style="margin-top: 20px;font-size: 12px;">支持jpg、gif、png图片格式</div>
             </div>
-            <br/>
+            <div class="clear"></div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">填报时间</p>
+                <div class="row_right">
+                    <p>{{detail.create_time}}</p>
+                </div>
+            </div>
 
             <div class="form_row" style="margin-top: 50px;" >
                 <div class="next2" :visible="auth.uid==auth.uid_return" :click="submit()">完成</div>
@@ -107,10 +126,13 @@
             $id: "root",
             $uid: "",
             detail: {
+                "company":"",
+                "name":"",
                 "trace_id":"",
                 "invested": "",
                 "date": "",
                 "pid": "",
+                "create_time":"",
                 "img" :[]
             },
             auth:{
@@ -123,15 +145,19 @@
                     url: "/trace/facility/get",
                     trace_id: model.detail.trace_id
                 }, function (data) {
+                    model.detail.company = data.res.company;
+                    model.detail.name = data.res.name;
                     model.detail.invested = data.res.invested;
                     model.detail.date=data.res.date;
                     model.detail.pid=data.res.pid;
+                    model.detail.create_time=data.res.create_time;
                     model.auth.uid_return=data.res.uid;
                     if(model.detail.img){
                         for(var i in data.res.img){
                             model.img.push({
                                 img_url:data.res.img[i]
                             })
+                            console.log(model.img);
                         }
                     }
 
@@ -146,35 +172,20 @@
                 detail.url = url;
                 $.ajaxPost(detail, function (data) {
                     alert("操作成功");
-                    redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+                    redict_iframe("/trace/t/#facility/facility_list.html?pid="+model.detail.pid);
                 });
             },
             goBack: function(){
-                redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+                redict_iframe("/trace/t/#facility/facility_list.html?pid="+model.detail.pid);
             },
             removeImg: function (index) {
-                if (!confirm("确认删除码")) return;
+                if (!confirm("确认删除吗")) return;
 
                 for (var i in model.img) {
                     if (i == index) {
                         model.img.splice(index, 1);
                     }
                 }
-            },
-            getDate: function () {
-                var date = new Date();
-                var seperator1 = "-";
-                var year = date.getFullYear();
-                var month = date.getMonth() + 1;
-                var strDate = date.getDate();
-                if (month >= 1 && month <= 9) {
-                    month = "0" + month;
-                }
-                if (strDate >= 0 && strDate <= 9) {
-                    strDate = "0" + strDate;
-                }
-                var currentdate = year + seperator1 + month + seperator1 + strDate;
-                return currentdate;
             }
         });
         model.uid = window.sessionStorage.getItem('uid');

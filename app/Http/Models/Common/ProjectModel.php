@@ -279,4 +279,50 @@ class ProjectModel extends Model
 
         return $this->obj;
     }
+
+    //根据项目id 用户id 找到对应的投入填报列表
+    //根据id找到详情
+    public function project_processFacility_select($condition, $fields = [], $by = []){
+        $this->obj = DB::table("tc_process_facility")
+            ->leftJoin('tc_project', function ($join1) {
+                $join1->on('tc_process_facility.pid', '=', 'tc_project.pid');
+            })->where("tc_process_facility.del_flag", 0);
+
+        foreach ($condition as $k => $v) {
+            if ($v !== null && $v !== '') {
+                switch ($k) {
+                    case "uid": $this->obj = $this->obj->where("tc_process_facility." . $k, $v);
+                        break;
+                    case "id": $this->obj = $this->obj->where("tc_process_facility." . $k, $v);
+                        break;
+                    case "pid": $this->obj = $this->obj->where("tc_process_facility.pid", $v);
+                        break;
+                }
+            }
+        }
+        $this->getJoin($condition, $fields, $by);
+        return $this->obj;
+    }
+
+    //根据用户名和企业联系电话匹配可见项目列表
+    public function project_enterprise_select($condition, $fields = [], $by = []){
+        $this->obj = DB::table("tc_project")->where("tc_project.del_flag", 0);
+
+        foreach ($condition as $k => $v) {
+            if ($v !== '') {
+                switch ($k) {
+                    case "username":
+                        $this->obj = $this->obj->where("tc_project.company_contact", $v);
+                        break;
+                    case "pid":
+                        $this->obj = $this->obj->where("tc_project." . $k, $v);
+                        break;
+                }
+            }
+        }
+
+        $this->getJoin($condition, $fields, $by);
+        return $this->obj;
+    }
+
 }

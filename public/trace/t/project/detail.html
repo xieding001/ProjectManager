@@ -17,7 +17,7 @@
     <![endif]-->
     <style>
         nav li {
-            width: 25% !important;
+            width: 20% !important;
         }
 
         .order_ul {
@@ -74,6 +74,7 @@
                     <li ms-attr="{class:show_type==2?'active_bg':''}" :click="echarts()">总进度</li>
                     <li ms-attr="{class:show_type==3?'active_bg':''}" :click="flow(3)">前期进度</li>
                     <li ms-attr="{class:show_type==4?'active_bg':''}" :click="time()">施工进度</li>
+                    <li ms-attr="{class:show_type==6?'active_bg':''}" :click="facility()">设备投入</li>
                     <!--<li ms-attr="{class:show_type==5?'active_bg':''}" :click="flow(5)">验收进度</li>-->
                 </nav>
                 <nav :if="canClick == 0">
@@ -81,6 +82,7 @@
                     <li ms-attr="{class:show_type==2?'active_bg':''}" :click="echarts()">总进度</li>
                     <li ms-attr="{class:show_type==3?'active_bg':''}" :click="flow(3)">前期进度</li>
                     <li ms-attr="{class:show_type==4?'active_bg':''}" :click="time()">施工进度</li>
+                    <li ms-attr="{class:show_type==6?'active_bg':''}" :click="facility()">设备投入</li>
                     <!--<li ms-attr="{class:show_type==5?'active_bg':''}" :click="cannot()">验收进度</li>-->    
                 </nav>
             </div>
@@ -401,6 +403,69 @@
                 <div class="flowChart" :visible="trace.length>0"></div>
             </div>
 
+            <div class="order_main" :visible="show_type==6">
+
+                <div class="item_box" style="height: 200px;" :visible="trace.length>0">
+
+                    <div class="main" style="margin-top: -20px;">
+                        <!-- 表格部分 -->
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>企业名称</th>
+                                <th>项目名称</th>
+                                <th>设备投入(万元)</th>
+                                <th>月份</th>
+                                <th>填报时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ms-for="(i,el) in zlist">
+                                <td>{{ i+1+(page.no-1)*10 }}</td>
+                                <td style="text-align:left">{{ el.company }}</td>
+                                <td style="text-align:left">{{ el.name }}</td>
+                                <td>{{ el.invested }}</td>
+                                <td>{{ el.date }}</td>
+                                <td>{{ el.create_time }}</td>
+                                <td>
+                                    <span class="look" :click="redict('/trace/t/#facility/facility_detail.html?traceId='+el.id+'&from=detail')">详情</span>
+                                </td>
+                            </tr>
+                            <tr :visible="page.doing">
+                                <td colspan='13'>
+                                    <img src="/img/loading.gif" alt="" width="40" height="40">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- 分页组件 -->
+                        <div style="width: 100%;text-align: center;">
+                            <ul class="pagination fr" :visible="page.count > page.size">
+                                <li class="disabled">
+                                    <span>总记录数：{{ page.count }}</span>
+                                </li>
+                                <li><a href="javascript:;" :click="list(1)">首页</a></li>
+                                <li><a href="javascript:;" :click="list(page.no-1)">上一页</a></li>
+                                <!--ms-for: el in page.nums-->
+                                <li class="active" :if="el==page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                                <li :if="el!=page.no"><a href="javascript:;" :click="list(el)">{{ el }}</a></li>
+                                <!--ms-for-end:-->
+                                <li><a href="javascript:;" :click="list(page.no+1)">下一页</a></li>
+                                <li><a href="javascript:;" :click="list(Math.ceil(page.count/page.size))">尾页</a></li>
+                            </ul>
+                            <div class="pagination-no-data" :visible="page.count == 0">您还没有此类数据...</div>
+
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
             <div class="order_main" :if="show_type==5">
                 <div style="width: 10%;float: left;padding-top: 80px;padding-left: 8px;">
                     <li style="float: left;width: 100%;">
@@ -429,6 +494,8 @@
                     <div id="demo5" style="margin:auto;border: 1px solid #ddd;"></div>
                 </div>
             </div>
+			
+			
         </div>
     </div>
 </div>
@@ -439,6 +506,7 @@
         model = avalon.define({
             $id: "root",
             $uid: "",
+            zlist: [],
             show_type: 1,
             detail: {
                 "rid": "",
@@ -479,8 +547,36 @@
                 type: "",
                 img: []
             },
-            pid: "",
+            $pid: "",
             canClick: "",
+            page: {
+                no: 1,
+                begin: 0,
+                end: 0,
+                size: 10,
+                count: 1,
+                nums: [],
+                doing: false
+            },
+            list: function (pageNo) {
+                if ((pageNo <= 0) || (pageNo > Math.ceil(model.page.count / model.page.size))) return;
+                if (model.page.doing) return;
+                model.page.doing = true;
+                model.zlist = [];
+                model.page.no = parseInt(pageNo);
+                $.ajaxGet({
+                    url: "/trace/facility/list",
+                    pageSize: model.page.size,
+                    pageNo: model.page.no,
+                    pid: model.pid
+                }, function (data) {
+                    model.page.doing = false;
+                    model.page.count = data.count;
+                    model.page = $.page(model.page);
+                    model.zlist = data.list;
+                    console.log();
+                });
+            },
             doDetail: function () {
                 $.ajaxGet({
                     url: "/trace/project/detail",
@@ -590,6 +686,9 @@
                     timeAxis(jsonArr);
                 });
             },
+            facility: function () {
+                model.show_type = 6;
+            },
             show: function () {
                 if (model.show_type == 2) {
                     model.echarts();
@@ -608,10 +707,18 @@
                 alert("请先完成前期进度");
             }
         });
+
         model.uid = window.sessionStorage.getItem('uid');
         model.pid = getRequest().pid;
+
         model.show_type = getRequest().show ? getRequest().show : 1;
         model.doDetail();
+        if(window.sessionStorage.getItem('pageNo')){
+            model.list(window.sessionStorage.getItem('pageNo'));
+
+        }else{
+            model.list(1);
+        }
     });
     require(["baseUiIndex.css", "bootstrap"]);
     function showTrace(o, i) {

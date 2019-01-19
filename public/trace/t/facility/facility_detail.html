@@ -2,9 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>设备投入</title>
+    <link rel="stylesheet" href="/css/release.css">
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="/css/detail_new.css">
 
+    <script src="/js/lib/requirejs/require.js"></script>
+    <script src="/js/lib/requirejs/main.js"></script>
+    <style>
+        .form_double_row .row_right span {
+            height: auto !important;
+        }
+
+        .ms-controller {
+            visibility: hidden;
+        }
+
+        .order_ul {
+          padding: 0 25px 0 25px;
+        }
+        .order_ul li{
+            min-height: 30px;
+        }
+
+        nav li {
+            width: 50% !important;
+        }
+    </style>
+
+</head>
+<body ms-controller="root" class="ms-controller" style="height: 860px;overflow: hidden;">
+
+<div class="release_product pr3">
+    <div class="main-contain" style="height: 830px;overflow: hidden;">
+        <div class="title">修改设备投入</div>
+        <div class="order_main">
+        <div class="item_box">
+            <br/>
+            <div class="order_title">内容：</div>
+            <ul class="order_ul" style="float: left;"><p></p>
+                <li>
+                    <p>企业名称：</p>
+                    <p>{{ detail.company }}</p>
+                </li>
+                <li>
+                    <p>项目名称：</p>
+                    <p>{{ detail.name }}</p>
+                </li>
+                <li>
+                    <p>月份：</p>
+                    <p>{{ detail.date }}</p>
+                </li>
+                <li>
+                    <p>投入金额（万元）：</p>
+                    <p>{{ detail.invested }}</p>
+                </li>
+                <li>
+                    <p>填报时间：</p>
+                    <p>{{ detail.create_time }}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="item_box"  >
+            <div class="order_title">图片：</div>
+            <ul class="order_img order_ul order_ul2" style="min-height: 200px;">
+                <li :for="el in img" >
+                    <a target="_blank" ms-attr="{href:el.img_url}"><img ms-attr="{src:el.img_url}"></a>
+                </li>
+            </ul>
+        </div>
+        <div class="item_box" style="height: 50px;">
+            <div style="width: 150px;background:#dddddd;" class="next2" :click="goBack()">
+                返回
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    var model;
+    require(["baseUiIndex.css", "font-awesome.css"]);
+    require(['avalon'], function (avalon) {
+        model = avalon.define({
+            $id: "root",
+            $uid: "",
+            $from:"",
+            detail: {
+                "company": "",
+                "name":"",
+                "trace_id":"",
+                "invested": "",
+                "create_time":"",
+                "date": "",
+                "pid": "",
+                "img" :[]
+            },
+            "img": [],
+            getFacilityDetail:function () {
+                $.ajaxGet({
+                    url: "/trace/facility/get",
+                    trace_id: model.detail.trace_id
+                }, function (data) {
+                    model.detail.company = data.res.company;
+                    model.detail.name = data.res.name;
+                    model.detail.invested = data.res.invested;
+                    model.detail.date=data.res.date;
+                    model.detail.create_time=data.res.create_time;
+                    model.detail.pid=data.res.pid;
+
+                    if(model.detail.img){
+                        for(var i in data.res.img){
+                            model.img.push({
+                                img_url:data.res.img[i]
+                            })
+                        }
+                    }
+
+                });
+            },
+            goBack: function(){
+                redict_iframe("/trace/t/#"+ (model.from!="detail"?"facility/"+model.from+".html?pid="+model.detail.pid: "project/"+model.from+".html?pid="+model.detail.pid+"&&show=6"));
+            }
+        });
+        model.uid = window.sessionStorage.getItem('uid');
+
+        model.detail.trace_id = getRequest().traceId;
+
+        model.from = getRequest().from;
+        model.getFacilityDetail();
+    });
+
+</script>
 </body>
+
 </html>

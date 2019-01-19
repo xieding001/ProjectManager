@@ -129,7 +129,12 @@ class LoginController extends Controller
         $menu = json_decode($json_string, true);
 
         if ($detail->role == "admin") {
-            $menu2 = $menu;
+            foreach($menu as $k => $v){
+                if($v["role"][0] == "admin"){
+                    $menu2[] = $v;
+                }
+            }
+      //      $menu2 = $menu;
         } else {
             $menu2 = [];
             foreach ($menu as $k => $v) {

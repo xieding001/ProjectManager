@@ -64,6 +64,24 @@ Route::group(['prefix'=>'trace','namespace'=>'Trace','middleware' => 'TraceLogin
 
     });
 
+    // 项目设备投入上报
+    Route::group(['prefix'=>'facility'],function(){
+
+        Route::get('pList',['uses'=>'FacilityController@projectList']);
+
+        Route::get('list',['uses'=>'FacilityController@facilityList']);
+
+        Route::post('add',['uses'=>'FacilityController@facilityAdd']);
+
+        Route::get('addAuth',['uses'=>'FacilityController@facilityAddAuth']);
+//        Route::post('check',['uses'=>'FacilityController@facilityCheck']);
+
+        Route::post('edit',['uses'=>'FacilityController@facilityEdit']);
+
+        Route::get('get',['uses'=>'FacilityController@facilityGet']);
+
+    });
+
     //四、报告
     Route::group(['prefix'=>'report'],function(){
 

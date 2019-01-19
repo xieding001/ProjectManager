@@ -15,6 +15,7 @@
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
+
         nav li {
             width: 7.69% !important;
             font-weight: 400 !important;
@@ -58,14 +59,27 @@
     <div class="main-contain">
         <!-- 顶部搜索部分 -->
         <div class="top">
-            <p class="title">设备投入上报&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                （红色列表为此月未填报）
-            </p>
+            <p class="title">设备投入上报</p>
+
+            <div class="list">
+
+                <div class="dw_filter dw_filter on" style="margin-bottom: 0px;">
+                    <div class="el on" style="padding-right: 25px">
+                        <div class="btnbox" style="margin-top: 5px;float: right;padding-left: 0">
+                            <span class="p_but" :click="redict('/trace/t/#facility/project_list.html')">返回</span>
+                        </div>
+                        <div class="btnbox" style="margin-top: 5px;float: right;padding-left: 0">
+                            <span class="p_but" :click="redict('/trace/t/#facility/facility_add.html?pid='+pid)">新增</span>
+                        </div>
 
 
+                    </div>
+                </div>
+            </div>
             <div class="clear"></div>
         </div>
 
+        <div class="main" style="margin-top: -10px;">
 
             <!-- 表格部分 -->
             <table class="table">
@@ -82,7 +96,7 @@
                 </thead>
                 <tbody>
                 <!--ms-for: (i,el) in zlist-->
-                <tr ms-attr="{class:el.is_trace>0?'':'red'}">
+                <tr>
                     <td>{{ i+1+(page.no-1)*10 }}</td>
                     <td style="text-align:left">{{ el.company }}</td>
                     <td style="text-align:left">{{ el.name }}</td>
@@ -90,7 +104,8 @@
                     <td>{{ el.date }}</td>
                     <td>{{ el.create_time }}</td>
                     <td>
-                        <span class="look" :click="redict('/trace/t/#project/facility_edit.html?traceId='+el.id)">编辑</span>
+                        <span class="look" :visible="el.new_flag==1" :click="redict('/trace/t/#facility/facility_edit.html?traceId='+el.id)">编辑</span>
+                        <span class="look" :click="redict('/trace/t/#facility/facility_detail.html?traceId='+el.id+'&from=facility_list')">详情</span>
                     </td>
                 </tr>
                 <!--ms-for-end:-->
@@ -129,6 +144,8 @@
     require(['avalon'], function (avalon) {
         var model = avalon.define({
             $id: "root",
+            $uid:"",
+            $pid:"",
             zlist: [],
             search: {
                 rid: "",
@@ -148,11 +165,13 @@
                 if (model.page.doing) return;
                 model.page.doing = true;
                 model.zlist = [];
-                model.page.no = pageNo;
+                model.page.no = parseInt(pageNo);
                 $.ajaxGet({
                     url: "/trace/facility/list",
                     pageSize: model.page.size,
-                    pageNo: model.page.no
+                    pageNo: model.page.no,
+                    pid:model.pid,
+                    uid:model.uid
                 }, function (data) {
                     model.page.doing = false;
                     model.page.count = data.count;
@@ -162,8 +181,6 @@
             },
             doList: function (rid) {
                 model.page.count = 1;
-                model.search.rid = rid;
-                window.sessionStorage.setItem('rid',rid);
                 this.list(1);
             },
             doList2: function () {
@@ -176,16 +193,16 @@
             }
         });
 
-        if(window.sessionStorage.getItem('name')){
-            model.search.name = window.sessionStorage.getItem('name');
+        if(window.sessionStorage.getItem('uid')){
+            model.uid = window.sessionStorage.getItem('uid');
         }
+
+        model.pid = getRequest().pid;
         if(window.sessionStorage.getItem('pageNo')){
             model.list(window.sessionStorage.getItem('pageNo'));
-
         }else{
             model.list(1);
         }
-
     });
     require(["baseUiIndex.css", "bootstrap"]);
 </script>

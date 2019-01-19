@@ -95,6 +95,7 @@ avalon.component('ms-left', {
             $.ajaxGet({
                 url: "/trace/login/detail"
             }, function (data) {
+                console.log(data);
                 that.userInfo = data.detail;
                 that.userAlready = true;
                 that.menu.clear();

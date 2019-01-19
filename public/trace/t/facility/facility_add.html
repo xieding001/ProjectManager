@@ -36,8 +36,24 @@
 
 <div class="release_product pr3">
     <div class="main-contain" style="height: 830px;overflow: hidden;">
-        <div class="title">设备投入填报&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(每个月10号前填报上个月的)</div>
+        <div class="title">新增设备投入&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(每个月10号前填报上个月的)</div>
         <div class="form" style="margin-top: 20px;">
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">公司名称：</p>
+
+                <div class="row_right" >
+                   <p>{{detail.company}}</p>
+                </div>
+            </div>
+            <div class="form_row">
+                <div style="clear: both;"></div>
+                <p class="row_left">项目名称：</p>
+
+                <div class="row_right" >
+                   <p>{{detail.name}}</p>
+                </div>
+            </div>
             <div class="form_row">
                 <div style="clear: both;"></div>
                 <p class="row_left">月份</p>
@@ -87,46 +103,43 @@
             <br/>
 
             <div class="form_row" style="margin-top: 50px;">
-                <div class="next2" :click="submit()">完成</div>
+                <div class="next2" :visible="showBtn.flag == 1" :click="submit()">完成</div>
             </div>
             <div class="form_row">
                 <div class="next2" style="background:#dddddd;" :click="goBack()">返回</div>
             </div>
-
+            <div class="form_row">
+                <div style="text-align: center" :visible="showBtn.flag == 0" >{{showBtn.errmsg}}</div>
+            </div>
         </div>
 
 
     </div>
 </div>
 <script>
-    var month=function(){
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = date.getMonth();
-        var day = date.getDate();
-        if(day <= 10)
-            if(month == 0)
-                document.getElementById('month').value = year-1 +"年12月";
-            else
-                document.getElementById('month').value = year+"年"+month+"月";
-        else
-            document.getElementById('month').value = year+"年"+month+1+"月";
-    };
-    month();
+
 
     var model;
     require(["baseUiIndex.css", "font-awesome.css"]);
     require(['avalon'], function (avalon) {
         model = avalon.define({
             $id: "root",
+            $uid:"",
             detail: {
+                "company":"",
+                "name":"",
                 "date":"",
                 "invested": "",
                 "img" :[]
             },
             "img": [],
+            showBtn: {
+                "flag": "",
+                "errmsg":""
+            },
             submit: function () {
                 var detail = model.detail;
+
                 for (var i in model.img){
                     detail.img.push(model.img[i].img_url);
                 }
@@ -134,43 +147,58 @@
                 detail.url = url;
                 detail.date=document.getElementById('month').value;
                 detail.invested=document.getElementById('invested').value;
-                console.log(detail);
                 $.ajaxPost(detail, function (data) {
                     alert("操作成功");
-                    redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+                    redict_iframe("/trace/t/#facility/facility_list.html?pid="+model.detail.pid);
+                });
+            },
+            month: function() {
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = date.getMonth();
+                var day = date.getDate();
+                if(day <= 10)
+                    if(month == 0)
+                        document.getElementById('month').value = year-1 +"年12月";
+                    else
+                        document.getElementById('month').value = year+"年"+month+"月";
+                else
+                    document.getElementById('month').value = year+"年"+month+1+"月";
+            },
+            getLatest: function(){
+                $.ajaxGet({
+                    url: "/trace/facility/addAuth",
+                    pid:model.detail.pid,
+                    uid:model.uid
+                }, function (data) {
+                    if(data.res) {
+                        model.detail.company = data.res.company;
+                        model.detail.name = data.res.name;
+                        model.showBtn.flag = 1;
+                    }
+                    else{
+                        model.showBtn.flag = 0;
+                        model.showBtn.errmsg = "无权限，请到您管理的项目下填报！";
+                    }
                 });
             },
             goBack: function(){
-                redict_iframe("/trace/t/#project/detail.html?pid="+model.detail.pid+"&show=6");
+                redict_iframe("/trace/t/#facility/facility_list.html?pid="+model.detail.pid);
             },
             removeImg: function (index) {
-                if (!confirm("确认删除码")) return;
+                if (!confirm("确认删除吗")) return;
 
                 for (var i in model.img) {
                     if (i == index) {
                         model.img.splice(index, 1);
                     }
                 }
-            },
-            getDate: function () {
-                var date = new Date();
-                var seperator1 = "-";
-                var year = date.getFullYear();
-                var month = date.getMonth() + 1;
-                var strDate = date.getDate();
-                if (month >= 1 && month <= 9) {
-                    month = "0" + month;
-                }
-                if (strDate >= 0 && strDate <= 9) {
-                    strDate = "0" + strDate;
-                }
-                var currentdate = year + seperator1 + month + seperator1 + strDate;
-                return currentdate;
             }
         });
-
+        model.month();
         model.detail.pid = getRequest().pid;
-        model.detail.date = model.getDate();
+        model.uid = window.sessionStorage.getItem('uid');
+        model.getLatest();
     });
 
     //图片上传部分

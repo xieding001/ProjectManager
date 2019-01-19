@@ -46,6 +46,15 @@
     "son": []
   },
   {
+    "name": "设备投入",
+    "url": "/trace/t/#facility/project_list.html",
+    "activity": 0,
+    "role": [
+      "not_admin"
+    ],
+    "son": []
+  },
+  {
     "name": "用户列表",
     "url": "/trace/t/#user/list.html",
     "activity": 0,
